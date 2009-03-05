@@ -1,0 +1,23 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+    <head>
+        <title>Ldap Synchronization Connector Management Web Interface</title>
+    </head>
+    <body>
+        <h1>Ldap Synchronization Connector Management Web Interface</h1>
+
+        <p> With this interface, you can :
+            <ul>
+            	<li>[<t:pagelink t:page="EditGlobalConfiguration">Edit the global configuration parameters </t:pagelink>]</li>
+            	<li>[<t:pagelink t:page="task/create">Create a new task</t:pagelink>]</li>
+            	<li>[<t:pagelink t:page="task/list">List existing tasks</t:pagelink>]</li>
+            	<li>[<t:pagelink t:page="ConsultExecutionLog">Consult the task execution logs</t:pagelink>]</li>
+            </ul>
+        </p>
+
+        <p>
+            <t:pagelink t:page="Index">Back to home page</t:pagelink> - 
+            <t:pagelink t:page="ServiceStatus">Self generated service status</t:pagelink>
+        </p>
+        <p><small>This version is running on top of Tapestry (version ${tapestryVersion}) and LSC (version ${lscVersion}).</small></p>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd">
+    <head>
+        <title>Ldap Synchronization Connector Management Web Interface</title>
+    </head>
+    <body>
+        <h1>Ldap Synchronization Connector Management Web Interface</h1>
+        <h2>Edit the 
+        <t:if test="fromSource">source<t:parameter name="else">target</t:parameter></t:if>
+        service</h2>
+		<t:beaneditform t:object="service" model="model"/>
+		<p><t:pagelink t:page="Index">Back to home page</t:pagelink></p>
+    </body>
+</html>
