@@ -194,7 +194,7 @@
 		<dependency>
 			<groupId>org.lsc</groupId>
 			<artifactId>lsc-core</artifactId>
-			<version>1.1-beta1</version>
+			<version>1.1.1</version>
 		</dependency>
 	</dependencies>
 

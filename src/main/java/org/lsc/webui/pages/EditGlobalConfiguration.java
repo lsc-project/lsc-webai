@@ -79,6 +79,8 @@ public class EditGlobalConfiguration {
 	private ErrorPage errorPage;
 
 	public EditGlobalConfiguration() {
+		Configuration.setLocation("etc/");
+
 		if(sourceDirectoryProperties == null) {
 			sourceDirectoryProperties = Configuration.getSrcProperties();
 		}
