@@ -123,6 +123,14 @@ public class DirectorySettings {
 		this.authenticationType = authenticationType;
 	}
 
+	public void setAuthenticationType(String authenticationType) {
+		if(authenticationType != null) {
+			this.authenticationType = AuthenticationType.valueOf(authenticationType.toUpperCase());
+		} else {
+			this.authenticationType = AuthenticationType.ANONYMOUS;
+		}
+	}
+
 	public void setDirectoryURL(String directoryURL) {
 		this.directoryURL = directoryURL;
 	}
@@ -130,9 +138,25 @@ public class DirectorySettings {
 	public void setReferralHandling(ReferralHandling referralHandling) {
 		this.referralHandling = referralHandling;
 	}
+	
+	public void setReferralHandling(String referralHandling) {
+		if(referralHandling != null) {
+			this.referralHandling = ReferralHandling.valueOf(referralHandling.toUpperCase());
+		} else {
+			this.referralHandling = ReferralHandling.IGNORE;
+		}
+	}
 
 	public void setAliasesHandling(AliasesHandling aliasesHandling) {
 		this.aliasesHandling = aliasesHandling;
+	}
+
+	public void setAliasesHandling(String aliasesHandling) {
+		if(aliasesHandling != null) {
+			this.aliasesHandling = AliasesHandling.valueOf(aliasesHandling.toUpperCase());
+		} else {
+			this.aliasesHandling = AliasesHandling.NEVER;
+		}
 	}
 
 	public void setVersion(LdapVersion version) {

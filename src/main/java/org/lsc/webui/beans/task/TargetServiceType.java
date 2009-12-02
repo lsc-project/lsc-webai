@@ -9,6 +9,7 @@ public class TargetServiceType {
 	public enum Type {
 		SimpleJndiDstService,
 		FullDNJndiDstService,
+		Other
 	}
 
 	public TargetServiceType(Type type, String implementation) {
@@ -20,7 +21,8 @@ public class TargetServiceType {
 		try {
 			return new TargetServiceType(Type.valueOf(value.substring(value.lastIndexOf(".") + 1)), value);
 		} catch(IllegalArgumentException iae) {
-			throw new IllegalArgumentException("No recognized type: " + SourceServiceType.class.getName() + "." + value, iae);
+			return new TargetServiceType(Type.Other, value);
+		//	throw new IllegalArgumentException("No recognized type: " + SourceServiceType.class.getName() + "." + value, iae);
 		}
 	}
 }

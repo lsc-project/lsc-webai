@@ -37,16 +37,16 @@ public class EditService {
 
 	@Property(write = false)
 	@Retain
-	private BeanModel model;
+	private BeanModel<?> model;
 
 	public Object initialize(Task task,
 			SourceServiceType sourceServiceDescription) {
 		if (task.getSourceService() != null) {
 			service = task.getSourceService();
-			model = beanModelSource.create(service.getClass(), true, resources.getMessages());
+			model = beanModelSource.createEditModel(service.getClass(), resources.getMessages());
 		} else {
 			service = new DataServiceImpl();
-			model = beanModelSource.create(DataServiceImpl.class, true, resources.getMessages());
+			model = beanModelSource.createEditModel(DataServiceImpl.class, resources.getMessages());
 		}
 		fromSource = true;
 		this.task = task;

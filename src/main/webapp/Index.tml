@@ -15,6 +15,13 @@
         </p>
 
         <p>
+            <ul>
+            	<li>Current configuration directory is: ${lscConfigurationPath}</li>
+            	<li>[<t:pagelink t:page="EditConfigurationPath">Change it</t:pagelink>]</li>
+            </ul>
+        </p>
+         
+        <p>
             <t:pagelink t:page="Index">Back to home page</t:pagelink> - 
             <t:pagelink t:page="ServiceStatus">Self generated service status</t:pagelink>
         </p>

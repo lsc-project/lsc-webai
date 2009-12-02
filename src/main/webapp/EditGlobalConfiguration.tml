@@ -5,23 +5,39 @@
     <body>
         <h1>Ldap Synchronization Connector Management Web Interface</h1>
         <h2>Edit global configuration parameters</h2>
-        <p>
+		<p>
         	<t:actionlink t:page="directorySettings/edit" t:id="editSourceDirectorySettings">
-        		Edit the source directory properties
+	        	<t:if t:test="sourceDirectoryProperties">
+	        		Edit the source directory properties
+			        <t:parameter t:name="else">
+			        		Add source directory properties
+			        </t:parameter>
+		        </t:if>
         	</t:actionlink>
-        </p>
+	    </p>
             	
         <p>
-        	<t:actionlink t:page="databaseSettings/edit" t:id="editDatabaseSettings">
-        		Edit the database properties
+	       	<t:actionlink t:page="databaseSettings/edit" t:id="editDatabaseSettings">
+		        <t:if t:test="databaseProperties">
+	        		Edit the database properties
+			        <t:parameter t:name="else">
+		        		Add database properties
+		    	    </t:parameter>
+				</t:if>
+			</t:actionlink>
+        </p>
+	
+        <p>
+        	<t:actionlink t:page="directorySettings/edit" t:id="editTargetDirectorySettings">
+		        <t:if t:test="targetDirectoryProperties">
+	        		Edit the target directory properties
+			        <t:parameter t:name="else">
+		        		Add target directory properties
+			        </t:parameter>
+	        	</t:if>
         	</t:actionlink>
         </p>
 
-        <p>
-        	<t:actionlink t:page="directorySettings/edit" t:id="editTargetDirectorySettings">
-        		Edit the target directory properties
-        	</t:actionlink>
-        </p>
 		<p><t:pagelink t:page="Index">Back to home page</t:pagelink></p>
     </body>
 </html>

@@ -19,6 +19,7 @@
 		<url>http://tools.lsc-project.org/</url>
 	</issueManagement>
 	<inceptionYear>2009</inceptionYear>
+
 	<mailingLists>
 		<mailingList>
 			<name>Announcements about Ldap Synchronization Project (LSC) - low-volume</name>
@@ -49,6 +50,7 @@
 			<archive>http://lists.lsc-project.org/listinfo/lsc-changes</archive>
 		</mailingList>
 	</mailingLists>
+
 	<developers>
 		<developer>
 			<id>sbahloul</id>
@@ -64,6 +66,7 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+
 	<licenses>
 		<license>
 			<name>BSD</name>
@@ -81,6 +84,11 @@
 		<name>LSC project</name>
 		<url>http://lsc-project.org/</url>
 	</organization>
+
+	<properties>
+		<tapestry-release-version>5.0.18</tapestry-release-version>
+	</properties>
+
 	<build>
 		<finalName>lsc-webui</finalName>
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
@@ -298,9 +306,5 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-
-	<properties>
-		<tapestry-release-version>5.0.18</tapestry-release-version>
-	</properties>
 
 </project>

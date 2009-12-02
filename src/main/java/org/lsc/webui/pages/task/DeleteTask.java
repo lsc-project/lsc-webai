@@ -43,31 +43,28 @@
  *         Remy-Christophe Schermesser <rcs@lsc-project.org>
  ****************************************************************************
  */
-package org.lsc.webui.pages;
+package org.lsc.webui.pages.task;
 
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.lsc.Configuration;
+import org.lsc.webui.beans.task.Task;
 
 /**
- * Start page of LSC Web User Interface.
+ * Delete a task
  * 
  * @author Sebastien Bahloul &lt;seb@lsc-project.org&gt;
  */
-public class Index {
+public class DeleteTask {
 
-	@Property @Persist
-	private String lscConfigurationPath;
-	
-	public void setupRender() {
-		lscConfigurationPath = Configuration.getConfigurationDirectory();
-	}
-	
-	public String getLSCVersion() {
-		return new org.lsc.Version().VERSION;
+	@Property
+	private Task task;
+
+	void onActivate(Object[] contextValues) {
+		if(contextValues.length > 0) {
+			this.task = new Task((String) contextValues[0]);
+		}
 	}
 
-	public String getTapestryVersion() {
-		return "unknown";
+	public Object onActionFromConfirmation() {
+		return ListTask.class;
 	}
 }

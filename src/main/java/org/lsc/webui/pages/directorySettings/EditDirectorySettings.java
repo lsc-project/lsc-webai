@@ -53,11 +53,8 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.lsc.Configuration;
 import org.lsc.webui.base.EditSettings;
-import org.lsc.webui.beans.directory.AliasesHandling;
-import org.lsc.webui.beans.directory.AuthenticationType;
 import org.lsc.webui.beans.directory.DirectorySettings;
 import org.lsc.webui.beans.directory.LdapVersion;
-import org.lsc.webui.beans.directory.ReferralHandling;
 import org.lsc.webui.pages.ErrorPage;
 
 /**
@@ -107,29 +104,23 @@ public class EditDirectorySettings extends EditSettings {
 		propertiesPrefix = prefix;
 		directorySettings = new DirectorySettings();
 		if (localProperties != null) {
-			directorySettings.setAliasesHandling(AliasesHandling
-					.valueOf((String) localProperties
-							.getProperty(LDAP_ALIASES_HANDLING).toUpperCase()));
-			directorySettings.setAuthenticationType(AuthenticationType
-					.valueOf((String) localProperties
-							.getProperty(LDAP_AUTHENTICATION_TYPE).toUpperCase()));
-			directorySettings.setCredentials((String) localProperties
-					.getProperty(LDAP_CREDENTIALS));
-			directorySettings.setDirectoryURL((String) localProperties
-					.getProperty(LDAP_URL));
-			directorySettings.setPrincipal((String) localProperties
-					.getProperty(LDAP_PRINCIPAL));
-			directorySettings.setReferralHandling(ReferralHandling
-					.valueOf((String) localProperties
-							.getProperty(LDAP_REFERRAL_HANDLING).toUpperCase()));
-			if(localProperties.getProperty(LDAP_VERSION).compareToIgnoreCase("2") == 0) {
-				directorySettings.setVersion(LdapVersion.VERSION_2);
-			} else if (localProperties.getProperty(LDAP_VERSION).compareToIgnoreCase("3") == 0) {
+			directorySettings.setAliasesHandling(localProperties.getProperty(LDAP_ALIASES_HANDLING));
+			directorySettings.setAuthenticationType(localProperties.getProperty(LDAP_AUTHENTICATION_TYPE));
+			directorySettings.setCredentials(localProperties.getProperty(LDAP_CREDENTIALS));
+			directorySettings.setDirectoryURL(localProperties.getProperty(LDAP_URL));
+			directorySettings.setPrincipal(localProperties.getProperty(LDAP_PRINCIPAL));
+			directorySettings.setReferralHandling(localProperties.getProperty(LDAP_REFERRAL_HANDLING));
+			if(localProperties.getProperty(LDAP_VERSION) != null) {
+				if(localProperties.getProperty(LDAP_VERSION).compareToIgnoreCase("2") == 0) {
+					directorySettings.setVersion(LdapVersion.VERSION_2);
+				} else if (localProperties.getProperty(LDAP_VERSION).compareToIgnoreCase("3") == 0) {
+					directorySettings.setVersion(LdapVersion.VERSION_3);
+				} else {
+					// Handle incorrect value
+				}
+			} else {
 				directorySettings.setVersion(LdapVersion.VERSION_3);
 			}
-			directorySettings.setReferralHandling(ReferralHandling
-					.valueOf((String) localProperties
-							.getProperty(LDAP_REFERRAL_HANDLING).toUpperCase()));
 		}
 		return this;
 	}

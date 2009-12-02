@@ -47,7 +47,9 @@ package org.lsc.webui.beans.task;
 
 import java.util.Properties;
 
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.lsc.Configuration;
 import org.lsc.webui.beans.service.DataService;
 
 /**
@@ -56,14 +58,19 @@ import org.lsc.webui.beans.service.DataService;
  */
 public class Task {
 
-	@Validate("required")
+	public static final String TASKS_PREFIX = "lsc.tasks";
+	
+/*	@Validate("required")*/
 	private String name;
 
 	@Validate("required")
+	@Parameter
 	private TaskType type;
 	
+	@Parameter
 	private String bean;
 	
+	@Parameter
 	private String object;
 
 	@Validate("required")
@@ -74,8 +81,16 @@ public class Task {
 	private TargetServiceType targetServiceDescription;
 	private DataService targetService;
 
-	public Task(String taskName, Properties properties) {
+	public Task() {
+
+	}
+	
+	public Task(String taskName) {
 		name = taskName;
+		setProperties(Configuration.getAsProperties(TASKS_PREFIX + "." + taskName));
+	}
+	
+	public void setProperties(Properties properties)  {
 		type = TaskType.valueOf(properties.getProperty("type").toUpperCase());
 		sourceServiceDescription = SourceServiceType.valueOf(properties.getProperty("srcService")); 
 		targetServiceDescription = TargetServiceType.valueOf(properties.getProperty("dstService"));
@@ -150,5 +165,4 @@ public class Task {
 	public void setObject(String object) {
 		this.object = object;
 	}
-
 }

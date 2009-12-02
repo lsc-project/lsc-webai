@@ -76,6 +76,11 @@ public class EditTask extends EditSettings {
 	@InjectPage
 	private EditService editService;
 
+	void onActivate(Object[] contextValues) {
+		if(contextValues.length > 0) {
+			this.task = new Task((String) contextValues[0]);
+		}
+	}
 
 	public Object initialize(Task task) {
 		this.task = task;
@@ -103,6 +108,6 @@ public class EditTask extends EditSettings {
 	}
 
 	private String getPrefix() {
-		return ListTask.TASKS_PREFIX + "." + task.getName();
+		return Task.TASKS_PREFIX + "." + task.getName();
 	}
 }

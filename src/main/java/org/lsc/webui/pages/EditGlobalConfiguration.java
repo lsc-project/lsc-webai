@@ -83,16 +83,29 @@ public class EditGlobalConfiguration {
 
 		if(sourceDirectoryProperties == null) {
 			sourceDirectoryProperties = Configuration.getSrcProperties();
+			if(sourceDirectoryProperties.size() == 0) {
+				sourceDirectoryProperties = null;
+			}
 		}
 		if(targetDirectoryProperties == null) {
 			targetDirectoryProperties = Configuration.getDstProperties();
+			if(targetDirectoryProperties.size() == 0) {
+				targetDirectoryProperties = null;
+			}
 		}
 		if(databaseProperties == null) {
 			databaseProperties = new Properties();
+			if(databaseProperties.size() == 0) {
+				databaseProperties = null;
+			}
 		}
 	}
 	
 	public Object onActionFromEditSourceDirectorySettings() {
+		return editDirectorySettings.initialize("src", sourceDirectoryProperties);  
+	}
+
+	public Object onActionFromCreateSourceDirectorySettings() {
 		return editDirectorySettings.initialize("src", sourceDirectoryProperties);  
 	}
 

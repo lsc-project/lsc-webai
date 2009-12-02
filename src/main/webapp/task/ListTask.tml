@@ -5,7 +5,15 @@
     <body>
         <h1>Ldap Synchronization Connector Management Web Interface</h1>
         <h2>List tasks</h2>
-		<t:grid t:source="tasks"/>
+		<t:grid source="tasks" row="task" reorder="name,type,object,delete" include="name,type,object,delete" add="delete">
+            <t:parameter name="typeHeader">Task type</t:parameter>
+            <t:parameter name="nameCell">
+                <t:pagelink t:page="task/edit" t:context="task.name">${task.name}</t:pagelink>
+            </t:parameter>
+            <t:parameter name="deleteCell">
+                <t:pagelink t:page="task/delete" t:context="task.name">Delete</t:pagelink>
+            </t:parameter>
+		</t:grid>
 		<p><t:pagelink t:page="Index">Back to home page</t:pagelink></p>
     </body>
 </html>
