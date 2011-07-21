@@ -1,0 +1,46 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<t:if test="update">
+		<h2>Edit the service settings</h2>
+		<t:beaneditform t:id="editExistingService" t:object="service" t:model="model"/>
+
+		<p:else>
+			<t:if test="fromSource">
+				<h2>Select and set the source service settings</h2>
+				<p:else>
+					<h2>Select and set the destination service settings</h2>
+				</p:else>
+			</t:if>
+			
+			<t:form t:id="connectionTypeForm" t:zone="serviceTypeZone">
+				<t:errors />
+				<p>Select the connection to use</p>
+		
+				<select t:type="select" t:model="connectionsModel" t:value="connectionName"
+					t:validate="required"/>
+				<t:submit id="submit" value="Select"/>
+			</t:form>
+			<t:zone t:id="serviceTypeZone" id="serviceTypeZone" t:visible="false">
+				<t:if test="connectionName">
+					<t:form t:id="serviceTypeForm" t:zone="serviceEditZone">
+						<t:errors />
+						<p>Select the service type to use</p>
+				
+						<select t:type="select" t:model="serviceTypesModel" t:value="serviceTypeName"
+							t:validate="required"/>
+						<t:submit id="submit" value="Select"/>
+					</t:form>
+				</t:if>
+			</t:zone>
+			<t:zone t:id="serviceEditZone" id="serviceEditZone" t:visible="false">
+				<t:ProgressiveDisplay id="progressiveDisplay">
+						<br/><br/>
+						<t:if test="serviceTypeName">
+							<t:beaneditform t:id="editNewService" t:object="service" t:model="model"/>
+						</t:if>
+				</t:ProgressiveDisplay>
+			</t:zone>
+		</p:else>
+	</t:if>
+</div>

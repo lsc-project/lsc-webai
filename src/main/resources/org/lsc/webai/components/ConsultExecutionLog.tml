@@ -1,0 +1,24 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	  t:title="message:lsc.app.title">
+        
+	<h2>${message:lsc.consultlog.title}</h2>
+	
+	<div t:type="zone" t:id="filenameZone">
+		${message:lsc.consultlog.specifyLogsPath}
+		<t:form t:id="logsLocationForm">
+			<t:errors />
+			<t:textfield t:id="logsLocation"
+				t:mixins="zoneUpdater,autocomplete" t:clientEvent="change" t:event="changeOfLogsLocation" t:zone="filenameZone" size="60" />
+			<t:select t:id="fileSelect" t:model="filesModel"
+				t:value="fileName" t:validate="required" t:blankOption="ALWAYS" t:blankLabel="Choose..."
+				 t:zoneUpdater.zone="showLogZone" t:mixins="zoneUpdater" t:clientEvent="change" t:event="changeOfFileSelect"/>
+		</t:form>
+	</div>
+
+	<div t:type="zone" t:id="showLogZone" width="100%">
+		${message:lsc.consultlog.fileContent}
+		<t:form id="nothing">
+			<t:textarea t:value="fileContent" rows="10" cols="150"/>
+		</t:form>
+	</div>
+</div>

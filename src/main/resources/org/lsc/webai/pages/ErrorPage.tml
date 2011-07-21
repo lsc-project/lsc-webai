@@ -1,0 +1,9 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+    <head>
+        <title>Ldap Synchronization Connector Management Web Interface</title>
+    </head>
+    <body>
+        <h1>Ldap Synchronization Connector Management Web Interface</h1>
+        <p>The LSC Web Interface encountered an unrecoverable error: ${exception}.</p>
+    </body>
+</html>

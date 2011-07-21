@@ -1,0 +1,204 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:type="layout" t:title="message:lsc.app.title">
+
+	<h2>${message:lsc.index.title}</h2>
+
+	<t:if test="message"><font color="red">${message}</font></t:if>
+
+	<div id="tabs">
+			<ul>
+				<li><a href="#tabs-config">${message:lsc.index.config}</a></li>
+				<li><a href="#tabs-logs">${message:lsc.index.logs}</a></li>
+				<li><a href="#tabs-status">${message:lsc.index.status}</a></li>
+				<li><a href="#tabs-scheduler">${message:lsc.index.scheduler}</a></li>
+			</ul>
+		<div id="tabs-config">
+			<h3>
+				<a href="#">${message:lsc.index.config}</a>
+			</h3>
+			Lsc configuration revision : 
+			<t:if test="lscConfiguration.revision"> ${lscConfiguration.revision}
+				<p:else>initialized from old properties configuration file format</p:else>
+			</t:if>
+			<div>
+				<ul>
+					<t:if test="lscStarted" negate="true">
+						<div t:type="EditConfigurationPath"/>
+					</t:if>
+					<t:if test="lscConfiguration.modified">
+						<li>
+							${message:lsc.index.confmodified}
+							-
+							<t:actionlink t:id="saveConfiguration" class="ui-state-highlight">${message:lsc.index.saveconf}</t:actionlink>
+							-
+							<t:actionlink t:id="revertConfiguration">${message:lsc.index.revertconf}</t:actionlink>
+						</li>
+					</t:if>
+				</ul>
+				<ul>
+					<t:if test="connectionsModel.getOptions().isEmpty()" negate="true">
+						<li>
+							<t:form t:id="editConnection">
+								${message:lsc.index.connectionmessage}
+								<t:select t:id="connectionToEdit" t:model="connectionsModel"
+									t:value="connectionName" t:validate="required" />
+								<t:submit t:id="editConnectionButton" value="${message:lsc.index.editConnection}"/>
+								<t:submit t:id="deleteConnectionButton" value="${message:lsc.index.deleteConnection}"
+									t:mixins="tapx/Confirm"
+									t:confirm.message="${message:lsc.index.deleteconnection.confirm}"/>
+							</t:form>
+						</li>
+					</t:if>
+					<li>
+						<t:form t:id="createConnection">
+							<t:select t:model="availableConnectionModel" t:value="newConnectionType"
+								t:validate="required" />
+							<t:submit value="message:lsc.index.createconnection" />
+						</t:form>
+					</li>
+				</ul>
+				<ul>
+					<t:if test="tasksModel.getOptions().isEmpty()" negate="true">
+						<li>
+							<t:form t:id="editTask">
+								${message:lsc.index.taskmessage}
+								<t:select t:id="taskToEdit" t:model="tasksModel"
+									t:value="taskName" t:validate="required" />
+								<t:submit t:id="editTaskButton" value="${message:lsc.index.edittask}"/>
+								<t:submit t:id="deleteTaskButton" value="${message:lsc.index.deletetask}" t:mixins="tapx/Confirm"
+									t:confirm.message="${message:lsc.index.deletetask.confirm}"/>
+							</t:form>
+						</li>
+					</t:if>
+					<t:if test="isTasksModelAsLeastSizeTwo()">
+						<li>
+							[<t:actionlink t:id="createTask">${message:lsc.index.createtask}</t:actionlink>]
+						</li>
+					</t:if>
+				</ul>
+				<ul>
+					<t:if test="auditsModel.getOptions().isEmpty()" negate="true">
+						<li>
+							<t:form t:id="editAudit">
+								${message:lsc.index.auditmessage}
+								<t:select t:id="auditToEdit" t:model="auditsModel"
+									t:value="auditName" t:validate="required" />
+								<t:submit t:id="editAuditButton" value="${message:lsc.index.editaudit}"/>
+								<t:submit t:id="deleteAuditButton" value="${message:lsc.index.deleteaudit}" t:mixins="tapx/Confirm"
+									t:confirm.message="${message:lsc.index.deleteaudit.confirm}" />
+							</t:form>
+						</li>
+					</t:if>
+					<li>
+						<t:form t:id="createAudit">
+							<t:select t:model="availableAuditModel" t:value="auditNewType"
+								t:validate="required" />
+							<t:submit value="${message:lsc.index.createaudit}" />
+						</t:form>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="tabs-logs">
+			<h3>
+				<a href="#">${message:lsc.index.logs}</a>
+			</h3>
+			<div t:type="ConsultExecutionLog" />
+		</div>
+		<div id="tabs-status">
+			<h3>
+				<a href="#">${message:lsc.index.status}</a>
+			</h3>
+			<div>
+				<t:if test="lscStarted">
+					${message:lsc.instance.started} ${lscPid} -
+					${message:lsc.instance.status} : ${lscStatus}
+					<ul>
+						<li>
+							<t:if test="ConfigurationPathChecked" negate="true">
+								${message:lsc.badconfigurationdirectory}
+								<t:parameter name="else">${message:lsc.configurationdirectorychecked}
+								</t:parameter>
+							</t:if>
+						</li>
+						<li>
+							<t:form t:id="stopInstance">
+								${message:lsc.instance.stop}
+								<t:submit t:mixins="tapx/confirm" t:message="lsc.stop.instance" />
+							</t:form>
+						</li>
+						<t:if test="syncTaskModel.getOptions().isEmpty()" negate="true">
+							<li>
+								<t:form t:id="startSyncTask">
+						t:mixins="zoneUpdater" t:clientEvent="change" t:event="changeOfFileSelect" t:zone="logZone"			${message:lsc.tasks.startSync}
+									<t:select t:id="syncTasks" t:model="syncTaskModel"
+										t:value="taskName" t:validate="required" />
+									${message:lsc.tasks.withId}
+									<t:textfield t:id="idToSync" t:validate="required,regexp=.+" />
+									<t:submit />
+								</t:form>
+							</li>
+						</t:if>
+						<t:if test="asyncStoppedTaskModel.getOptions().isEmpty()"
+							negate="true">
+							<li>
+								<t:form t:id="startAsyncTask">
+									${message:lsc.tasks.startAsync}
+									<t:select t:id="asyncTasksToStart" t:model="asyncStoppedTaskModel"
+										t:value="taskName" t:validate="required" />
+									<t:submit />
+								</t:form>
+							</li>
+						</t:if>
+						<t:if test="asyncStartedTaskModel.getOptions().isEmpty()"
+							negate="true">
+							<li>
+								<t:form t:id="stopAsyncTask">
+									${message:lsc.tasks.stopAsync}
+									<t:select t:id="asyncTasksToStop" t:model="asyncStartedTaskModel"
+										t:value="taskName" t:validate="required" />
+									<t:if test="asyncTasksNumberMoreThanOne">
+										<t:submit />
+										<p:else>
+											<t:submit t:mixins="tapx/confirm" t:confirm.message="asynctask.stop.lastinstance" />
+										</p:else>
+									</t:if>
+								</t:form>
+							</li>
+						</t:if>
+					</ul>
+					<p:else>
+						${message:lsc.instance.notstarted}
+						<ul>
+							<li>
+								<div t:type="zone" t:id="startInstance" t:mixins="zoneUpdater" 
+									t:clientEvent="click" t:event="onStartInstance" t:zone="messagesZone">
+									<a href="#">${message:lsc.instance.start}</a>
+								</div>
+							</li>
+						</ul>
+					</p:else>
+				</t:if>
+				<br />
+				<div t:type="zone" t:id="messagesZone">
+					<t:if test="instanceMessages">
+						${message:lsc.messages.output} :
+						<br />
+						<textarea cols="120" rows="10">${instanceMessages}</textarea>
+						<br />
+					</t:if>
+					<t:if test="instanceErrors">
+						${message:lsc.messages.error} :
+						<br />
+						<textarea cols="120" rows="10">${instanceErrors}</textarea>
+						<br />
+					</t:if>
+				</div>
+			</div>
+		</div>
+		<div id="tabs-scheduler">
+			<div t:type="EditJobs"/>
+		</div>
+	</div>
+</div>

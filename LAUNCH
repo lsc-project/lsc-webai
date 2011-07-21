@@ -1,0 +1,31 @@
+Launching LSC WebAI
+===================
+
+For Linux or Mac users, go to this folder and launch the lsc-webai.sh startup script:
+
+  cd $INSTALL_DIR
+  ./lsc-webai.sh start
+
+For Windows users, go to the install folder and double click on lsc-webai.bat.
+
+To stop the application, call the lsc-webai.sh with the stop argument, under Linux or
+Mac:
+
+  cd $INSTALL_DIR
+  ./lsc-webai.sh stop
+
+For Windows users simply close the cmd panel.
+
+Accessing to LSC WebAI
+======================
+
+When the Jetty server have started you can access LSC Web Administrative Interface using
+a web explorer at http://localhost:8080/. 
+
+! IMPORTANT SECURITY NOTICE !
+=============================
+!! Take care that all identifiers and passwords used to connect to data sources are stored
+in a clear text format and are rendered through this administrative application. Please
+consider block any unauthorized access through a firewall rule, a Jetty security
+configuration or an HTTP authentifying reverse proxy in order to protect them.
+

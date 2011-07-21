@@ -1,0 +1,9 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+
+	Configuration path:
+	<t:form t:id="form">
+		<t:errors />
+		<t:textfield t:id="fileCompletion" size="60" t:mixins="Autocomplete"/>
+		<t:submit value="${message:lsc.path.update}"/>
+	</t:form>
+</div>

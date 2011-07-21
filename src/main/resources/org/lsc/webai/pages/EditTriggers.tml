@@ -1,0 +1,61 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:type="layout" t:title="message:lsc.app.title">
+
+	<h2>Manage job triggers for ${job.name}</h2>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-list">Triggers list</a></li>
+			<li><a href="#tabs-add">Add a trigger</a></li>
+		</ul>
+		<div id="tabs-list">
+			<if test="${message}">
+				<font color="red">${message}</font>
+			</if>
+			<t:zone t:id="triggersGridZone">
+				<t:grid t:id="triggersGrid" id="triggersGrid" t:source="triggers" t:model="triggersModel" t:include="id,name" t:row="trigger" t:add="edit,delete">
+					<p:editCell>
+						<t:actionlink t:id="editTriggerAction" t:context="trigger.name" t:zone="editTriggerZone">
+							<img src="images/edit.png" />
+						</t:actionlink>
+					</p:editCell>
+					<p:deleteCell>
+						<t:actionlink t:id="deleteTriggerAction" t:context="trigger.name" t:mixins="tapx/confirm"
+							t:confirm.message="${message:lsc.scheduler.deletetrigger.confirm}"
+							t:zone="triggersGridZone">
+							<img src="images/trash.png" />
+						</t:actionlink>
+					</p:deleteCell>
+					<p:empty>
+						<p>There are no trigger to display; you can add some below.</p>
+					</p:empty>
+				</t:grid>
+			</t:zone>
+			<t:zone t:id="editTriggerZone" id="editTriggerZone" t:visible="false">
+				<t:ProgressiveDisplay t:id="editTriggerProgressiveDisplay">
+						<br/><br/>
+						<t:if test="trigger">
+							<t:beaneditform t:id="editTrigger" t:object="trigger" t:zone="triggersGridZone" />
+						</t:if>
+				</t:ProgressiveDisplay>
+			</t:zone>
+		</div>
+		<div id="tabs-add">
+			<t:form t:id="triggerTypeForm" t:zone="addTriggerZone">
+				<t:errors />
+				<p>${message:lsc.triggers.add.choosetype}</p>
+		
+				<select t:type="select" t:model="triggerTypesModel" t:value="triggerType" t:validate="required"/>
+				<t:submit id="submit" value="Select"/>
+			</t:form>
+			<t:zone t:id="addTriggerZone" id="addTriggerZone" t:visible="false">
+				<t:ProgressiveDisplay t:id="addTriggerProgressiveDisplay">
+						<br/><br/>
+						<t:if test="trigger">
+							<t:beaneditform t:id="editNewTrigger" t:object="trigger" t:model="triggerModel" t:zone="triggersGridZone" />
+						</t:if>
+				</t:ProgressiveDisplay>
+			</t:zone>
+		</div>
+	</div>
+</div>

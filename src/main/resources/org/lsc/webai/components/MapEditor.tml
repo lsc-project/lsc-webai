@@ -1,0 +1,17 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" >
+	<ul>
+		<t:if test="keys.size()">
+			<li class="listeditor-row" t:type="loop" t:source="keys"
+				t:formState="none" t:value="key" t:index="index">
+				<t:propertyEditor property="${propertyName}" object="object" model="keyModel" overrides="overrides" />
+				<t:propertyEditor property="${propertyName}" object="object" model="valueModel" overrides="overrides" />
+				<t:submitcontext t:id="deleteValueButton" t:clientid="deleteValueButton" t:context="${deleteContext}" value="${deletevaluelabel}"/>
+			</li>
+			<p:else>
+				<li>No key/value pairs</li>
+			</p:else>
+		</t:if>
+	</ul>
+	${description}
+	<t:submitcontext t:id="addValueButton" t:clientid="addValueButton" t:context="${addContext}" value="${addvaluelabel}" />
+</t:container>

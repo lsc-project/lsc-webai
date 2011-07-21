@@ -1,0 +1,20 @@
+<div xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:type="layout" t:title="message:lsc.app.title">
+
+	<center>	
+		<t:zone t:id="lscHomeZone">
+			${message:lsc.consultlog.specifyLscHome}
+			<t:form t:id="confirmLscHome" t:zone="loading">
+				<t:errors />
+				<t:textfield t:id="lscHome"	t:mixins="autocomplete" t:zone="lscHomeZone" size="60" />
+				<t:submit/>
+			</t:form>
+		</t:zone>
+		<t:zone t:id="loading" id="loading" t:visible="false">
+			<t:ProgressiveDisplay id="progressiveDisplay" t:initial="Loading configuration ...">
+				<span class="blink">Please wait during LSC Web administrative interface initialization !</span>
+			</t:ProgressiveDisplay>
+		</t:zone>
+	</center> 
+</div>

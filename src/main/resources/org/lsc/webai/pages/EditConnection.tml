@@ -1,0 +1,15 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	  xmlns:p="tapestry:parameter"
+	  t:type="layout" t:title="message:lsc.app.title">
+
+       	<t:if test="connection.name">
+       		<h2>Edit "${connection.name}" connection settings</h2>
+       		<p:else>
+       			<h2>Create new connection</h2>
+       		</p:else>
+       	</t:if>
+        <if test="${message}"><font color="red">${message}</font></if>
+		<t:beaneditform t:object="connection" model="connectionModel" reorder="name"/>
+	
+</div>
+  

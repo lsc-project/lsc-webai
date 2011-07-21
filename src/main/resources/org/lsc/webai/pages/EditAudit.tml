@@ -1,0 +1,21 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:type="layout" t:title="message:lsc.app.title">
+
+	<t:if test="audit.name">
+		<h2>Edit audit "${audit.name}"</h2>
+		<p:else>
+			<h2>Create a new audit</h2>
+		</p:else>
+	</t:if>
+	<if test="${message}">
+		<font color="red">${message}</font>
+	</if>
+	<t:beaneditform t:object="audit" t:model="auditModel">
+		<t:parameter t:name="operations">
+			<t:loop source="jndiModificationTypes" value="operation">
+				<t:checkbox t:id="operation"/>${operation.description}
+        	</t:loop>
+		</t:parameter>
+	</t:beaneditform>
+
+</div>

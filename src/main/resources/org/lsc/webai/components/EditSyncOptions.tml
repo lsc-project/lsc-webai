@@ -1,0 +1,44 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" >
+
+	<t:if test="update">
+		<h2>${message:lsc.editsyncoptions.title}</h2>
+		<t:beaneditform t:id="editExistingSyncOptions" t:object="syncOptions" t:model="model" t:add="otherSettings">
+			<t:parameter name="otherSettings">
+				<t:mapEditor t:id="otherSettingsEditor"
+                     		t:eventsContextSuffix="literal:otherSettings"
+                     		object="syncOptions.otherSettings"
+                     		propertiesClass="literal:java.lang.String"
+                     		deleteValueLabel="${message:delete-label}"
+                     		addValueLabel="${message:add-label}"
+                     		label="#"
+                     	/> 
+			</t:parameter>
+		</t:beaneditform>			
+
+		<p:else>
+			<h2>Set the synchronization options</h2>
+
+			<t:form t:id="typeForm" t:zone="typeZone">
+				<t:errors />
+				<p>Select the synchronization options type to use</p>
+
+				<select t:type="select" t:model="syncOptionsTypeModel"
+					t:value="syncOptionsType" t:validate="required" />
+				<t:submit id="submit" value="Select" />
+			</t:form>
+			<t:zone t:id="typeZone" id="typeZone" t:visible="false">
+				<t:ProgressiveDisplay t:id="progressiveDisplay">
+					<br />
+					<br />
+					<t:if test="syncOptions">
+						<t:beaneditform t:id="editNewSyncOptions" t:object="syncOptions"
+							t:model="model"  t:include="otherSettings">
+						</t:beaneditform>
+					</t:if>
+				</t:ProgressiveDisplay>
+			</t:zone>
+
+		</p:else>
+	</t:if>
+</div>

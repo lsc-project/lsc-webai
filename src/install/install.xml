@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<installation version="1.0">
+
+	<info>
+		<appname>@{project.build.finalName}</appname>
+		<appversion>@{project.version}</appversion>
+		<url>@{project.url}</url>
+		<uninstaller name="uninstall.jar" path="${INSTALL_PATH}" write="yes" />
+		<javaversion>1.6</javaversion>
+		<requiresjdk>yes</requiresjdk>
+		<summarylogfilepath>${INSTALL_PATH}/install.log</summarylogfilepath>
+	</info>
+
+	<guiprefs width="800" height="600" resizable="yes">
+		<laf name="kunststoff">
+			<os family="unix" />
+		</laf>
+		<modifier key="useHeadingPanel" value="yes" />
+		<modifier key="useHeadingForSummary" value="yes" />
+		<modifier key="headingImageOnLeft" value="yes" />
+		<modifier key="headingLineCount" value="2" />
+		<modifier key="headingFontSize" value="1.5" />
+		<modifier key="headingBackgroundColor" value="0x00ffffff" />
+		<modifier key="headingPanelCounter" value="text" />
+		<modifier key="headingPanelCounterPos" value="inHeading" />
+	</guiprefs>
+
+	<locale>
+		<langpack iso3="eng" />
+	</locale>
+
+	<resources>
+		<res id="InfoPanel.info" src="README"/>
+		<res id="LicencePanel.licence" src="COPYING"/>
+		<res id="HTMLInfoPanel.launch" src="LAUNCH"/>
+		<res id="Installer.image" src="resources/lsc-logo.png" />
+<!--		<res id="Win_shortcutSpec.xml" src="resources/shortcut_win.xml" />
+		<res id="Unix_shortcutSpec.xml" src="resources/shortcut_unix.xml" /> -->
+	</resources>
+
+	<panels>
+		<panel classname="CheckedHelloPanel"/>
+		<panel classname="InfoPanel"/>
+		<panel classname="LicencePanel"/>
+		<panel classname="TargetPanel"/>
+		<panel classname="SummaryPanel" />
+		<panel classname="InstallPanel" />
+		<!--		<panel classname="ShortcutPanel"/> -->
+		<panel classname="HTMLInfoPanel" id="launch"/>
+		<panel classname="SimpleFinishPanel" />
+	</panels>
+
+	<listeners>
+		<listener installer="SummaryLoggerInstallerListener">
+			<os family="unix" />
+		</listener>
+	</listeners>
+
+	<packs>
+		<pack name="LSC Administrative Inteface" required="yes" installGroups="default"  >
+			<description>LSC Administrative Interface, directory information and access management.</description>
+			<fileset dir="." targetdir="$INSTALL_PATH">
+				<include name="**" />
+			</fileset>
+			<executable targetfile="$INSTALL_PATH/jetty/bin/jetty.sh" os="unix" stage="never" keep="true"/>
+			<executable targetfile="$INSTALL_PATH/lsc-webai.sh" os="unix"  stage="never" keep="true"/>
+		</pack>
+	</packs>
+
+
+<!--
+		The native libraries to add. This is required for creating shortcuts
+		on Windows
+	-->
+	<native type="izpack" name="ShellLink.dll">
+		<os family="windows"/>
+	</native>
+	
+</installation>

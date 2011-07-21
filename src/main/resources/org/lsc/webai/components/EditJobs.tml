@@ -1,0 +1,74 @@
+<div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<t:if test="${message}">
+		<font color="red">${message}</font>
+	</t:if>
+
+	<h3>${message:lsc.scheduler.jobslist}</h3>
+	<t:zone t:id="jobsZone" id="jobsZone">
+		<t:grid t:id="jobsGrid" source="jobs" row="job" t:add="context,task,edit,delete,trigger,sync">
+			<p:contextCell>
+				${job.context}
+			</p:contextCell>
+			<p:taskCell>
+				<t:if test="job.task">${job.task.name}</t:if>
+			</p:taskCell>
+			<p:triggerCell>
+				<t:actionlink t:id="editTriggers" t:context="job.name">
+					<img src="images/settings.png" />
+				</t:actionlink>
+			</p:triggerCell>
+			<p:editCell>
+				<t:actionlink t:id="editJob" t:context="job.name" t:zone="jobZone">
+					<img src="images/edit.png" />
+				</t:actionlink>
+			</p:editCell>
+			<p:deleteCell>
+				<t:actionlink t:id="deleteJob" t:context="job.name" t:mixins="tapx/confirm"
+					t:confirm.message="${message:lsc.scheduler.deletejob.confirm}"
+					t:zone="jobsZone">
+					<img src="images/trash.png" />
+				</t:actionlink>
+			</p:deleteCell>
+			<p:syncCell>
+				<t:actionlink t:id="syncJob" t:context="job.name" t:mixins="tapx/confirm"
+					t:confirm.message="${message:lsc.scheduler.syncjob.confirm}"
+					t:zone="jobsZone">
+					<img src="images/sync.png" />
+				</t:actionlink>
+			</p:syncCell>
+			<p:empty>
+				<p>There are no job to display; you can add some below.</p>
+			</p:empty>
+		</t:grid>
+	</t:zone>
+
+	<h3>${message:lsc.scheduler.addjob}</h3>
+	<t:form t:id="selectTask" t:zone="jobZone">
+		<t:errors />
+		Select the task to plan
+		<select t:type="select" t:model="tasksModel" t:value="taskName" t:validate="required"/>
+		<t:submit id="submit" value="Add a new job" />
+	</t:form>
+
+	<t:zone t:id="jobZone" id="jobZone">
+		<t:ProgressiveDisplay id="progressiveDisplay">
+			<t:if test="job">
+				<h3>${message:lsc.scheduler.newjobform}</h3>
+				<t:beaneditform t:id="addJob" t:object="job" t:add="context" t:zone="jobZone">
+					<t:parameter name="context">
+						<t:mapEditor t:id="contextEditor"
+                       		t:eventsContextSuffix="literal:context"
+                       		object="job.context"
+                       		propertiesClass="literal:java.lang.String"
+                       		deleteValueLabel="${message:delete-label}"
+                       		addValueLabel="${message:add-label}"
+                       		label="#"
+                       	/> 
+					</t:parameter>	
+				</t:beaneditform>
+			</t:if>
+		</t:ProgressiveDisplay>
+	</t:zone>
+</div>

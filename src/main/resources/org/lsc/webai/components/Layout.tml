@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<head>
+		<title>${title}</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" href="favicon.ico" />
+		<link type="text/css" href="css/south-street/jquery-ui-1.8.9.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="js/jquery-1.4.4.min.js"/>
+		<script type="text/javascript" src="js/jquery-ui-1.8.9.custom.min.js"/>
+		<script type="text/javascript" src="js/jquery.cookie.js"/>
+		<script type="text/javascript">
+			jQuery.noConflict();
+			jQuery(document).ready(function($) {
+				// Tabs
+				//jQuery('#tabs').tabs({cookie; {expires: 1}});
+		        jQuery("#tabs").tabs({
+		            ajaxOptions: {
+		                error: function(xhr, status, index, anchor) {
+		                    $(anchor.hash).html("Cannot load this tab at this time.");
+		                }
+		            },
+		            cookie: {name:'tabCookieName',
+		                // store cookie for set time, without, it would be a session cookie
+		                expires: 30
+		            }
+		        });
+				// Accordion
+				jQuery('#accordion').accordion({ header: "h3" });
+			});
+		</script>
+		<style type="text/css">
+			body { 
+				font: 62.5% "Trebuchet MS", sans-serif; 
+				background-image: url("css/south-street/images/ui-bg_highlight-hard_95_cccccc_1x100.png") repeat-x scroll 50% top #CCCCCC;;
+			    -moz-border-radius: 10px 10px 10px 10px;
+    			margin: 25px;
+    			padding: 12px;
+			}
+			h2 { margin-top: 1em; }
+		</style>
+	</head>
+	<body>
+ 	   	<div style="z-index: 1;"><h1>Ldap Synchronization Connector Administrative Interface</h1></div>
+ 	   	<div align="right" style="z-index: 2; position: absolute; top: 0; left: 70%;">
+ 	   		<a href="http://lsc-project.org"><img src="images/lsc-logo.png" alt="LSC Logo" width="200" /></a>
+ 	   	</div>
+		<t:body />
+		<!-- begin: #footer -->
+		<div id="footer">
+		    <p>
+		    	<t:if test="loadedFromHomePage" negate="true">
+	    			<t:pagelink t:page="HomePage">${message:lsc.backtohome}</t:pagelink>
+	    		</t:if> 
+	    		<!-- - 
+		    	<t:pagelink t:page="ServiceStatus">${message:lsc.components}</t:pagelink> -->
+		    </p>
+		    <p align="right"><small>This version of LSC Administrative Interface (${lscAIVersion}) is running on top of Tapestry (version ${tapestryVersion}) and LSC (version ${lscVersion}).</small></p>
+		</div>
+		<!-- end footer -->
+	</body>
+</html>

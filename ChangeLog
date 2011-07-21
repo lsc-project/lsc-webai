@@ -1,0 +1,18 @@
+2011-01-04  Sebastien Bahloul  <seb@lsc-project.org>
+
+	* Project can now add/edit task, connection, service and audit. It remains syncoptions
+	* WebAI is now Waiting for a good CSS designer
+
+2011-10-04  Sebastien Bahloul  <seb@lsc-project.org>
+
+	* LSC can be started and stopped from web interface
+	* LSC is now packaged inside Jetty runner
+
+2010-01-04  Sebastien Bahloul  <seb@lsc-project.org>
+
+	* Thanks to RCS, LSC has now an configuration object model
+	* Initial Jetty packaged has been added
+
+2009-02-25  Sebastien Bahloul  <seb@lsc-project.org>
+
+	* Project start
