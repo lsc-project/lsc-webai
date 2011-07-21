@@ -63,8 +63,8 @@
     </licenses>
     <scm>
         <connection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</connection>
-        <developerConnection>scm:svn:svn+ssh://login@lsc-project.org/var/lib/svn/lsc-webai/trunk</developerConnection>
-        <url>http://tools.lsc-project.org/repositories/browse/lsc-webai</url>
+        <developerConnection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</developerConnection>
+        <url>http://tools.lsc-project.org/projects/lsc/repository/show/lsc-webai</url>
     </scm>
     <organization>
         <name>LSC Project</name>
@@ -210,7 +210,7 @@
         <dependency>
             <groupId>org.lsc</groupId>
             <artifactId>lsc-core</artifactId>
-            <version>branch-webai-SNAPSHOT</version>
+            <version>trunk-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tapestry</groupId>
