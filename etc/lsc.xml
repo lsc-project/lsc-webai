@@ -1,0 +1,269 @@
+<?xml version="1.0" ?>
+<lsc id="1" revision="0">
+  <ldapConnection id="3">
+    <id>src-ldap</id>
+    <url defined-in="connection">ldap://localhost:33389/dc=lsc-project,dc=org</url>
+    <username>cn=Directory Manager</username>
+    <password>secret</password>
+    <authentication>SIMPLE</authentication>
+    <referral>IGNORE</referral>
+    <derefAliases>NEVER</derefAliases>
+    <version>VERSION_3</version>
+    <pageSize>-1</pageSize>
+    <factory>com.sun.jndi.ldap.LdapCtxFactory</factory>
+    <tlsActivated>false</tlsActivated>
+  </ldapConnection>
+  <databaseConnection id="4">
+    <id>src-jdbc</id>
+    <url>jdbc:hsqldb:file:hsqldb/lsc</url>
+    <username>sa</username>
+    <password></password>
+    <driver>org.hsqldb.jdbcDriver</driver>
+  </databaseConnection>
+  <ldapConnection id="5">
+    <id>dst-ldap</id>
+    <url defined-in="connection">ldap://localhost:33389/dc=lsc-project,dc=org</url>
+    <username>cn=Directory Manager</username>
+    <password>secret</password>
+    <authentication>SIMPLE</authentication>
+    <referral>IGNORE</referral>
+    <derefAliases>NEVER</derefAliases>
+    <version>VERSION_3</version>
+    <pageSize>-1</pageSize>
+    <factory>com.sun.jndi.ldap.LdapCtxFactory</factory>
+    <tlsActivated>false</tlsActivated>
+  </ldapConnection>
+  <task id="8">
+    <name>ldap2ldapTestTask</name>
+    <bean>org.lsc.beans.SimpleBean</bean>
+    <destination class="ldapDstService" id="9">
+      <name>ldap2ldapTestTask-dst</name>
+      <connection class="ldapConnection" reference="5"></connection>
+      <baseDn>ou=ldap2ldap2TestTaskDst,ou=Test Data</baseDn>
+      <pivotAttributes id="10">
+        <string>cn</string>
+        <string>sn</string>
+      </pivotAttributes>
+      <fetchedAttributes id="11">
+        <string>description</string>
+        <string>cn</string>
+        <string>objectClass</string>
+        <string>userPassword</string>
+        <string>sn</string>
+        <string>telephoneNumber</string>
+        <string>seeAlso</string>
+        <string>mail</string>
+      </fetchedAttributes>
+      <getAllFilter>(sn=*)</getAllFilter>
+      <getOneFilter>(sn={sn})</getOneFilter>
+    </destination>
+    <source class="ldapSrcService" id="12">
+      <name>ldap2ldapTestTask-src</name>
+      <connection class="ldapConnection" reference="3"></connection>
+      <baseDn>ou=ldap2ldap2TestTaskSrc,ou=Test Data</baseDn>
+      <pivotAttributes id="13">
+        <string>cn</string>
+        <string>sn</string>
+      </pivotAttributes>
+      <fetchedAttributes id="14">
+        <string>description</string>
+        <string>cn</string>
+        <string>sn</string>
+        <string>userPassword</string>
+        <string>telephoneNumber</string>
+        <string>seeAlso</string>
+      </fetchedAttributes>
+      <getAllFilter>(&amp;(sn=*))</getAllFilter>
+      <getOneFilter>(sn={sn})</getOneFilter>
+      <filterAsync>(&amp;(sn=*)(modifytimestamp&gt;={0}))</filterAsync>
+      <dateFormat>yyyyMMddHHmmss'Z'</dateFormat>
+      <interval>5</interval>
+    </source>
+    <syncOptions class="propertiesBasedSyncOption" id="15">
+      <otherSettings id="16"></otherSettings>
+      <conditions id="17"></conditions>
+      <mainIdentifier>"cn=" + srcBean.getAttributeFirstValueById("cn") + ",ou=ldap2ldap2TestTaskDst,ou=Test Data"</mainIdentifier>
+      <defaultDelimiter>,</defaultDelimiter>
+      <defaultPolicy>KEEP</defaultPolicy>
+      <attribute id="19">
+        <name>telephoneNumber</name>
+        <policy>MERGE</policy>
+        <defaultValues id="20">
+          <string>"123456"</string>
+          <string>"789987"</string>
+        </defaultValues>
+        <forceValues id="21"></forceValues>
+        <createValues id="22">
+          <string>"000000"</string>
+          <string>"11111"</string>
+        </createValues>
+      </attribute>
+      <attribute id="23">
+        <name>objectclass</name>
+        <policy>MERGE</policy>
+        <defaultValues id="24">
+          <string>"person"</string>
+          <string>"top"</string>
+        </defaultValues>
+        <forceValues id="25"></forceValues>
+        <createValues id="26">
+          <string>"inetOrgPerson"</string>
+        </createValues>
+      </attribute>
+      <attribute id="27">
+        <name>initials</name>
+        <policy>UNKNOWN</policy>
+        <defaultValues id="28"></defaultValues>
+        <forceValues id="29"></forceValues>
+        <createValues id="30">
+          <string>"cn=oops"</string>
+        </createValues>
+      </attribute>
+      <attribute id="31">
+        <name>default</name>
+        <policy>UNKNOWN</policy>
+        <defaultValues id="32"></defaultValues>
+        <forceValues id="33"></forceValues>
+        <createValues id="34"></createValues>
+      </attribute>
+      <attribute id="35">
+        <name>description</name>
+        <policy>MERGE</policy>
+        <defaultValues id="36">
+          <string>srcBean.getAttributeFirstValueById("userPassword")</string>
+        </defaultValues>
+        <forceValues id="37"></forceValues>
+        <createValues id="38"></createValues>
+      </attribute>
+      <attribute id="39">
+        <name>seeAlso</name>
+        <policy>FORCE</policy>
+        <defaultValues id="40"></defaultValues>
+        <forceValues id="41"></forceValues>
+        <createValues id="42"></createValues>
+      </attribute>
+      <attribute id="43">
+        <name>userPassword</name>
+        <policy>FORCE</policy>
+        <defaultValues id="44"></defaultValues>
+        <forceValues id="45">
+          <string>"secret" + srcBean.getAttributeFirstValueById("cn")</string>
+        </forceValues>
+        <createValues id="46"></createValues>
+      </attribute>
+      <attribute id="47">
+        <name>mail</name>
+        <policy>UNKNOWN</policy>
+        <defaultValues id="48"></defaultValues>
+        <forceValues id="49"></forceValues>
+        <createValues id="50">
+          <string>"ok@domain.net"</string>
+        </createValues>
+      </attribute>
+    </syncOptions>
+    <otherSettings id="51"></otherSettings>
+  </task>
+  <task id="52">
+    <name>db2ldapTestTask</name>
+    <bean>org.lsc.beans.SimpleBean</bean>
+    <destination class="ldapDstService" id="53">
+      <name>db2ldapTestTask-dst</name>
+      <connection class="ldapConnection" reference="5"></connection>
+      <baseDn>ou=db2ldap2TestTaskDst,ou=Test Data</baseDn>
+      <pivotAttributes id="54">
+        <string>givenName</string>
+        <string>sn</string>
+      </pivotAttributes>
+      <fetchedAttributes id="55">
+        <string>description</string>
+        <string>cn</string>
+        <string>objectClass</string>
+        <string>userPassword</string>
+        <string>sn</string>
+        <string>mail</string>
+      </fetchedAttributes>
+      <getAllFilter>(&amp;(sn=*)(givenName=*))</getAllFilter>
+      <getOneFilter>(&amp;(sn={sn})(givenName={givenName}))</getOneFilter>
+    </destination>
+    <source class="org.lsc.configuration.objects.services.Database" id="56">
+      <name>db2ldapTestTask-src</name>
+      <connection class="databaseConnection" reference="4"></connection>
+      <requestNameForObject>getObjectTestDb2Ldap</requestNameForObject>
+      <requestNameForList>getListTestDb2Ldap</requestNameForList>
+    </source>
+    <syncOptions class="propertiesBasedSyncOption" id="57">
+      <otherSettings id="58"></otherSettings>
+      <conditions id="59"></conditions>
+      <mainIdentifier>"cn=" + srcBean.getAttributeFirstValueById("givenName") + " " + + srcBean.getAttributeFirstValueById("sn") + ",ou=db2ldap2TestTaskDst,ou=Test Data"</mainIdentifier>
+      <defaultDelimiter>,</defaultDelimiter>
+      <defaultPolicy>KEEP</defaultPolicy>
+      <attribute id="61">
+        <name>cn</name>
+        <policy>FORCE</policy>
+        <defaultValues id="62"></defaultValues>
+        <forceValues id="63">
+          <string>srcBean.getAttributeFirstValueById("givenName") + " " + + srcBean.getAttributeFirstValueById("sn")</string>
+        </forceValues>
+        <createValues id="64"></createValues>
+      </attribute>
+      <attribute id="65">
+        <name>telephoneNumber</name>
+        <policy>MERGE</policy>
+        <defaultValues id="66">
+          <string>"123456"</string>
+          <string>"789987"</string>
+        </defaultValues>
+        <forceValues id="67"></forceValues>
+        <createValues id="68">
+          <string>"000000"</string>
+          <string>"11111"</string>
+        </createValues>
+      </attribute>
+      <attribute id="69">
+        <name>objectclass</name>
+        <policy>FORCE</policy>
+        <defaultValues id="70">
+          <string>"person"</string>
+          <string>"top"</string>
+          <string>"organizationalPerson"</string>
+          <string>"inetOrgPerson"</string>
+        </defaultValues>
+        <forceValues id="71"></forceValues>
+        <createValues id="72"></createValues>
+      </attribute>
+      <attribute id="73">
+        <name>default</name>
+        <policy>UNKNOWN</policy>
+        <defaultValues id="74"></defaultValues>
+        <forceValues id="75"></forceValues>
+        <createValues id="76"></createValues>
+      </attribute>
+      <attribute id="77">
+        <name>description</name>
+        <policy>MERGE</policy>
+        <defaultValues id="78">
+          <string>srcBean.getAttributeFirstValueById("userPassword")</string>
+        </defaultValues>
+        <forceValues id="79"></forceValues>
+        <createValues id="80"></createValues>
+      </attribute>
+      <attribute id="81">
+        <name>userPassword</name>
+        <policy>FORCE</policy>
+        <defaultValues id="82"></defaultValues>
+        <forceValues id="83">
+          <string>srcBean.getAttributeFirstValueById("password")</string>
+        </forceValues>
+        <createValues id="84"></createValues>
+      </attribute>
+    </syncOptions>
+    <otherSettings id="85"></otherSettings>
+  </task>
+  <security id="86">
+    <encryption id="87">
+      <keyfile>c:\workspace_lsc\lsc-full\lsc-webai\trunk\etc\lsc.key</keyfile>
+      <algorithm>AES</algorithm>
+      <strength>128</strength>
+    </encryption>
+  </security>
+</lsc>
