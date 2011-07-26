@@ -46,7 +46,6 @@
 package org.lsc.webai.pages;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.SelectModel;
@@ -71,12 +69,12 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.lsc.Configuration;
 import org.lsc.Launcher;
-import org.lsc.configuration.PropertiesConfigurationHelper;
 import org.lsc.configuration.XmlConfigurationHelper;
 import org.lsc.configuration.objects.Audit;
 import org.lsc.configuration.objects.Connection;
 import org.lsc.configuration.objects.LscConfiguration;
 import org.lsc.configuration.objects.Task;
+import org.lsc.exception.LscException;
 import org.lsc.webai.components.AbstractPathEdition;
 import org.lsc.webai.components.ConsultExecutionLog;
 import org.lsc.webai.services.LscRemoteCommands;
@@ -179,29 +177,17 @@ public class HomePage extends AbstractPathEdition {
 		if(instanceStarted) {
 			lscConfigurationPath = LscRemoteCommands.getConfigurationDirectory();
 		} else if(lscConfigurationPath == null) {
-			if(System.getProperty("LSC_HOME") != null) {
-				Configuration.setUp(lscHomePath + File.separator + "etc");
-				lscConfigurationPath = Configuration.getConfigurationDirectory();
-			} else {
-				LOGGER.error("LSC_HOME environment variable not set. LSC configuration loading will fail !");
-			}
-		}
-		try {
-			if(!LscConfiguration.isInitialized()) {
-				File xml = new File(lscConfigurationPath, XmlConfigurationHelper.LSC_CONF_XML);
-				if(xml.exists() && xml.isFile()) {
-					LscConfiguration.loadFromInstance(new XmlConfigurationHelper().getConfiguration(xml.toString()));
+			try {
+				if(System.getProperty("LSC_HOME") != null) {
+					Configuration.setUp(lscHomePath + File.separator + "etc");
+					lscConfigurationPath = Configuration.getConfigurationDirectory();
 				} else {
-					message = "Configuration loaded from old properties file format !";
-					PropertiesConfigurationHelper.loadConfigurationFrom(lscConfigurationPath);
+					LOGGER.error("LSC_HOME environment variable not set. LSC configuration loading will fail !");
 				}
-			} 
-		} catch (ConfigurationException e) {
-			message = "Unable to load configuration (" + e + ")";
-			LOGGER.error(e.toString(),e);
-		} catch (FileNotFoundException e) {
-			message = "Unable to load configuration (" + e + ")";
-			LOGGER.error(e.toString(),e);
+			} catch (LscException e) {
+				message = "Failed to load configuration (" + e + ")";
+				LOGGER.error(e.toString(),e);
+			}
 		}
 	}
 	
