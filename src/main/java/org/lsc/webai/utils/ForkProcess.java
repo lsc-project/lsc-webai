@@ -50,6 +50,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -99,11 +101,15 @@ public class ForkProcess implements Runnable {
 		builder.directory(new File(this.getClass().getClassLoader().getResource(".").getPath()));
 		List<String> commands = new ArrayList<String>();
 		if(SystemUtils.IS_OS_WINDOWS) {
-			commands.add(System.getProperty("java.home") + "/bin/java.exe");
+			if(debug) {
+				commands.add("c:\\windows\\system32\\cmd.exe");
+				commands.add("/K");
+			}
+			commands.add('"' + System.getProperty("java.home") + "\\bin\\java.exe" + '"');
 		} else {
 			commands.add(System.getProperty("java.home") + "/bin/java");
 		}
-		commands.add("-cp");
+		commands.add("-classpath ");
 		// Add the Run Jetty Run classpath
 		commands.add(getClasspath());
 		for(Entry<String, String> envItem : env.entrySet()) {
@@ -198,17 +204,24 @@ public class ForkProcess implements Runnable {
 		// Hack to handle Run Jetty Run Eclipse plugin
 		String rjrClassPath = System.getProperty("rjrclasspath", null);
 		if(rjrClassPath != null) {
-			return rjrClassPath;
+			try {
+				return new URI(rjrClassPath).getPath();
+			} catch (URISyntaxException e) {
+			}
 		}
 		if(System.getProperty("LSC_HOME") != null) {
 			StringBuffer cp = new StringBuffer();
-			File lscHome = new File(System.getProperty("LSC_HOME") + "/jetty/webapps/lsc-webai/WEB-INF/lib");
+			File lscHome = new File(System.getProperty("LSC_HOME"), "jetty" + File.separator + "webapps" + File.separator + "lsc-webai" + File.separator + "WEB-INF" + File.separator + "lib");
 			if(lscHome.exists() && lscHome.isDirectory()) {
 				for(String filename: lscHome.list(new SuffixFileFilter(".jar"))) {
 					if(cp.length() > 0) {
-						cp.append(":");
+						if(SystemUtils.IS_OS_WINDOWS) {
+							cp.append(";");
+						} else {
+							cp.append(":");
+						}
 					}
-					cp.append(lscHome.getAbsolutePath() + "/" + filename);
+					cp.append(lscHome.getAbsolutePath() + File.separator + filename);
 				}
 				return cp.toString();
 			}
