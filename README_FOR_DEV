@@ -1,5 +1,7 @@
 If you plan to test an unpackaged version of LSC, please consider the
-different following methods depending on your environment.
+different following methods depending on your environment. These method
+are dedicated to WebAI development and does not feet to LSC development
+because libraries are used in their static already build format ...
 
 Through Eclipse
 ---------------
@@ -29,3 +31,18 @@ Go inside the lsc-webai-dist/lsc-webai-1.0-SNAPSHOT and launch the lsc-webai.sh 
 $LSC_HOME/target/lsc-webai-dist/lsc-webai-1.0-SNAPSHOT# ./lsc-webai.sh start
 
 
+Debugging LSC via JDWP
+-----------------------
+
+If you want to be able to debug LSC when it is launched through webai, set the 
+following environment variable to the local TCP Port you want to connect to through
+your prefered debugger : 
+
+LSC_DEBUG_PORT=8010
+
+Then, when you have reached your console and clicked on "Start LSC engine ...", you
+must see the following message : 
+
+Listening for transport dt_socket at address: 8010
+
+This means that the LSC is waiting to start that you connect through JDWP to this port. 
