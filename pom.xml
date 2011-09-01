@@ -266,11 +266,6 @@
         </dependency>
         <!-- <dependency> <groupId>org.chenillekit</groupId> <artifactId>chenillekit-quartz</artifactId> 
 			<version>1.2.0</version> </dependency> -->
-        <dependency>
-            <groupId>org.clapper</groupId>
-            <artifactId>ocutil</artifactId>
-            <version>2.5.2</version>
-        </dependency>
 		<dependency>
 			<groupId>org.lsc.plugins.connectors</groupId>
 			<artifactId>nis</artifactId>
