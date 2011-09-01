@@ -74,11 +74,12 @@ import org.lsc.configuration.objects.Audit;
 import org.lsc.configuration.objects.Connection;
 import org.lsc.configuration.objects.LscConfiguration;
 import org.lsc.configuration.objects.Task;
+import org.lsc.exception.LscConfigurationException;
 import org.lsc.exception.LscException;
+import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.components.AbstractPathEdition;
 import org.lsc.webai.components.ConsultExecutionLog;
 import org.lsc.webai.services.LscRemoteCommands;
-import org.lsc.webai.utils.ClasstypeFinder;
 import org.lsc.webai.utils.ForkProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,6 +160,9 @@ public class HomePage extends AbstractPathEdition {
 			new XmlConfigurationHelper().saveConfiguration(xml.toString(), LscConfiguration.getInstance());
 			LscConfiguration.saved();
 		} catch (IOException e) {
+			message = "Unable to save to " + xml.toString() + " file ! (" + e.toString() + ")";
+			LOGGER.error(e.toString(), e);
+		} catch (LscConfigurationException e) {
 			message = "Unable to save to " + xml.toString() + " file ! (" + e.toString() + ")";
 			LOGGER.error(e.toString(), e);
 		}
