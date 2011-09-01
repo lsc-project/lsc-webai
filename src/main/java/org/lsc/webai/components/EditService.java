@@ -69,9 +69,9 @@ import org.lsc.configuration.objects.Connection;
 import org.lsc.configuration.objects.LscConfiguration;
 import org.lsc.configuration.objects.Service;
 import org.lsc.configuration.objects.Task;
+import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
-import org.lsc.webai.utils.ClasstypeFinder;
 
 public class EditService extends EditSettings {
 

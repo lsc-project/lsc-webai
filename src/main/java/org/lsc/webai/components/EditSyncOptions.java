@@ -65,9 +65,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.lsc.configuration.objects.SyncOptions;
 import org.lsc.configuration.objects.Task;
+import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
-import org.lsc.webai.utils.ClasstypeFinder;
 
 /**
  * Edit synchronization options
