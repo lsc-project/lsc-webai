@@ -195,23 +195,12 @@ public class AppModule {
 	
 	public ClasstypeFinder buildClasspathFinder() {
 		ClasstypeFinder cf = ClasstypeFinder.getInstance();
-		if(!cf.isInitialized()) {
-			URL baseDirectory = this.getClass().getClassLoader().getResource("org/lsc");
-			if(baseDirectory == null) {
-				throw new ExceptionInInitializerError("Unable to locate base classpath ! Aborting ...");
-			}
-			File libSubDirectory = new File(baseDirectory.getFile(), "../../../lib");
-			if(!libSubDirectory.isDirectory() || libSubDirectory.list() == null) {
-				throw new ExceptionInInitializerError("Unable to find LSC libraries in $LSC_HOME/lib directory ! Please check your installation and LSC_HOME environment variable before proceeding to this page. Aborting ... (identifier baseDirectory is " + baseDirectory + " )");
-			}
-			String[] jars = libSubDirectory.list();
-			File[] libs = new File[1+jars.length];
-			libs[0] = libSubDirectory;
-			for(int i = 0; i < jars.length; i++) {
-				libs[i+1] = new File(libSubDirectory, jars[i]);
-			}
-			cf.loadClasspath(libs);
+		URL baseDirectory = this.getClass().getClassLoader().getResource("org/lsc");
+		if(baseDirectory == null) {
+			throw new ExceptionInInitializerError("Unable to locate base classpath ! Aborting ...");
 		}
+		File libSubDirectory = new File(baseDirectory.getFile(), "../../../lib");
+		cf.setupClasspath(libSubDirectory);
 		return cf;
 	}
 	
