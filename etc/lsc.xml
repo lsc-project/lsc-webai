@@ -85,7 +85,7 @@
       <mainIdentifier>"cn=" + srcBean.getAttributeFirstValueById("cn") + ",ou=ldap2ldap2TestTaskDst,ou=Test Data"</mainIdentifier>
       <defaultDelimiter>,</defaultDelimiter>
       <defaultPolicy>KEEP</defaultPolicy>
-      <attribute id="19">
+      <dataset id="19">
         <name>telephoneNumber</name>
         <policy>MERGE</policy>
         <defaultValues id="20">
@@ -97,8 +97,8 @@
           <string>"000000"</string>
           <string>"11111"</string>
         </createValues>
-      </attribute>
-      <attribute id="23">
+      </dataset>
+      <dataset id="23">
         <name>objectclass</name>
         <policy>MERGE</policy>
         <defaultValues id="24">
@@ -109,8 +109,8 @@
         <createValues id="26">
           <string>"inetOrgPerson"</string>
         </createValues>
-      </attribute>
-      <attribute id="27">
+      </dataset>
+      <dataset id="27">
         <name>initials</name>
         <policy>UNKNOWN</policy>
         <defaultValues id="28"></defaultValues>
@@ -118,15 +118,15 @@
         <createValues id="30">
           <string>"cn=oops"</string>
         </createValues>
-      </attribute>
-      <attribute id="31">
+      </dataset>
+      <dataset id="31">
         <name>default</name>
         <policy>UNKNOWN</policy>
         <defaultValues id="32"></defaultValues>
         <forceValues id="33"></forceValues>
         <createValues id="34"></createValues>
-      </attribute>
-      <attribute id="35">
+      </dataset>
+      <dataset id="35">
         <name>description</name>
         <policy>MERGE</policy>
         <defaultValues id="36">
@@ -134,15 +134,15 @@
         </defaultValues>
         <forceValues id="37"></forceValues>
         <createValues id="38"></createValues>
-      </attribute>
-      <attribute id="39">
+      </dataset>
+      <dataset id="39">
         <name>seeAlso</name>
         <policy>FORCE</policy>
         <defaultValues id="40"></defaultValues>
         <forceValues id="41"></forceValues>
         <createValues id="42"></createValues>
-      </attribute>
-      <attribute id="43">
+      </dataset>
+      <dataset id="43">
         <name>userPassword</name>
         <policy>FORCE</policy>
         <defaultValues id="44"></defaultValues>
@@ -150,8 +150,8 @@
           <string>"secret" + srcBean.getAttributeFirstValueById("cn")</string>
         </forceValues>
         <createValues id="46"></createValues>
-      </attribute>
-      <attribute id="47">
+      </dataset>
+      <dataset id="47">
         <name>mail</name>
         <policy>UNKNOWN</policy>
         <defaultValues id="48"></defaultValues>
@@ -159,7 +159,7 @@
         <createValues id="50">
           <string>"ok@domain.net"</string>
         </createValues>
-      </attribute>
+      </dataset>
     </syncOptions>
     <otherSettings id="51"></otherSettings>
   </task>
