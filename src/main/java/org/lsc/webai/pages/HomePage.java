@@ -183,7 +183,7 @@ public class HomePage extends AbstractPathEdition {
 		} else if(lscConfigurationPath == null) {
 			try {
 				if(System.getProperty("LSC_HOME") != null) {
-					Configuration.setUp(lscHomePath + File.separator + "etc");
+					Configuration.setUp(lscHomePath + File.separator + "etc", false);
 					lscConfigurationPath = Configuration.getConfigurationDirectory();
 				} else {
 					LOGGER.error("LSC_HOME environment variable not set. LSC configuration loading will fail !");
