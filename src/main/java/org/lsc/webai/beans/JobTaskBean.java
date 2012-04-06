@@ -50,7 +50,7 @@ import java.util.TreeMap;
 
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.lsc.configuration.objects.Task;
+import org.lsc.configuration.TaskType;
 import org.lsc.webai.utils.LscJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -94,7 +94,7 @@ public class JobTaskBean {
 	@Property
 	private boolean nochangeid = false;
 	
-	private Task task;
+	private TaskType task;
 
 	private Map<String, String> context;
 	
@@ -160,11 +160,11 @@ public class JobTaskBean {
 		this.nochangeid = noChangeId;
 	}
 
-	public void setTask(Task task) {
+	public void setTask(TaskType task) {
 		this.task = task;
 	}
 	
-	public Task getTask() {
+	public TaskType getTask() {
 		return task;
 	}
 	

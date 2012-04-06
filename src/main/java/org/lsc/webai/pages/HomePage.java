@@ -69,11 +69,11 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.lsc.Configuration;
 import org.lsc.Launcher;
-import org.lsc.configuration.XmlConfigurationHelper;
-import org.lsc.configuration.objects.Audit;
-import org.lsc.configuration.objects.Connection;
-import org.lsc.configuration.objects.LscConfiguration;
-import org.lsc.configuration.objects.Task;
+import org.lsc.configuration.JaxbXmlConfigurationHelper;
+import org.lsc.configuration.AuditType;
+import org.lsc.configuration.ConnectionType;
+import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.TaskType;
 import org.lsc.exception.LscConfigurationException;
 import org.lsc.exception.LscException;
 import org.lsc.utils.ClasstypeFinder;
@@ -154,10 +154,10 @@ public class HomePage extends AbstractPathEdition {
 	/** HANDLE CONFIGURATION RELATED ACTIONS */
 	
 	public void onActionFromSaveConfiguration() {
-		File xml = new File(Configuration.getConfigurationDirectory(), XmlConfigurationHelper.LSC_CONF_XML);
+		File xml = new File(Configuration.getConfigurationDirectory(), JaxbXmlConfigurationHelper.LSC_CONF_XML);
 		try {
 			LscConfiguration.saving();
-			new XmlConfigurationHelper().saveConfiguration(xml.toString(), LscConfiguration.getInstance());
+			new JaxbXmlConfigurationHelper().saveConfiguration(xml.toString(), LscConfiguration.getInstance().getLsc());
 			LscConfiguration.saved();
 		} catch (IOException e) {
 			message = "Unable to save to " + xml.toString() + " file ! (" + e.toString() + ")";
@@ -319,9 +319,9 @@ public class HomePage extends AbstractPathEdition {
 	private EditTask editTask;
 
 	public SelectModel getTasksModel() {
-		Collection<Task> tasks = LscConfiguration.getTasks();
+		Collection<TaskType> tasks = LscConfiguration.getTasks();
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(Task task : tasks) {
+		for(TaskType task : tasks) {
 			options.add(new OptionModelImpl(task.getName(), task.getName()));
 		}
 		return new SelectModelImpl(null, options);
@@ -352,7 +352,7 @@ public class HomePage extends AbstractPathEdition {
 	}
 	
 	public Object onActionFromCreateTask() {
-		return editTask.initialize(new Task());
+		return editTask.initialize(new TaskType());
 	}
 	
 	
@@ -368,9 +368,9 @@ public class HomePage extends AbstractPathEdition {
 	private EditAudit editAudit;
 
 	public SelectModel getAuditsModel() {
-		Collection<Audit> audits = LscConfiguration.getAudits();
+		Collection<AuditType> audits = LscConfiguration.getAudits();
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(Audit audit : audits) {
+		for(AuditType audit : audits) {
 			options.add(new OptionModelImpl(audit.getName(), audit.getName()));
 		}
 		return new SelectModelImpl(null, options);
@@ -378,7 +378,7 @@ public class HomePage extends AbstractPathEdition {
 	
 	public SelectModel getAvailableAuditModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(String connectionClass : ClasstypeFinder.getInstance().findExtensions(Audit.class)) {
+		for(String connectionClass : ClasstypeFinder.getInstance().findExtensions(AuditType.class)) {
 			options.add(new OptionModelImpl(connectionClass.substring(connectionClass.lastIndexOf(".") + 1), connectionClass));
 		}
 		return new SelectModelImpl(null, options);
@@ -406,7 +406,7 @@ public class HomePage extends AbstractPathEdition {
 	
 	public Object onActionFromCreateAudit() {
 		try {
-			return editAudit.initialize((Audit) Class.forName(auditNewType).newInstance());
+			return editAudit.initialize((AuditType) Class.forName(auditNewType).newInstance());
 		} catch (InstantiationException e) {
 			message = "Unable to instanciate new audit (" + e + ")";
 			LOGGER.error(e.toString(),e);
@@ -433,9 +433,9 @@ public class HomePage extends AbstractPathEdition {
 
 	public SelectModel getConnectionsModel() {
 		LscConfiguration.getInstance();
-		Collection<Connection> connections = LscConfiguration.getConnections();
+		Collection<ConnectionType> connections = LscConfiguration.getConnections();
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(Connection connection : connections) {
+		for(ConnectionType connection : connections) {
 			options.add(new OptionModelImpl(connection.getName(), connection.getName()));
 		}
 		return new SelectModelImpl(null, options);
@@ -444,10 +444,10 @@ public class HomePage extends AbstractPathEdition {
 	@SuppressWarnings("unchecked")
 	public SelectModel getAvailableConnectionModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(String connectionClassName : ClasstypeFinder.getInstance().findExtensions(Connection.class)) {
+		for(String connectionClassName : ClasstypeFinder.getInstance().findExtensions(ConnectionType.class)) {
 			try {
-				Class<Connection> connectionClass = (Class<Connection>)Class.forName(connectionClassName);
-				options.add(new OptionModelImpl(connectionClass.newInstance().getConnectionTypeName(), connectionClass.getCanonicalName()));
+				Class<ConnectionType> connectionClass = (Class<ConnectionType>)Class.forName(connectionClassName);
+				options.add(new OptionModelImpl(connectionClass.newInstance().getName(), connectionClass.getCanonicalName()));
 			} catch (ClassNotFoundException e) {
 				LOGGER.error(e.toString(), e);
 			} catch (InstantiationException e) {
@@ -481,7 +481,7 @@ public class HomePage extends AbstractPathEdition {
 	
 	public Object onActionFromCreateConnection() {
 		try {
-			return editConnectionSettings.initialize((Connection) Class.forName(newConnectionType).newInstance());
+			return editConnectionSettings.initialize((ConnectionType) Class.forName(newConnectionType).newInstance());
 		} catch (InstantiationException e) {
 			message = "Unable to instanciate new audit (" + e + ")";
 			LOGGER.error(e.toString(),e);

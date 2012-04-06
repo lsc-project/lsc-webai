@@ -52,8 +52,8 @@ import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.configuration.objects.Audit;
-import org.lsc.configuration.objects.LscConfiguration;
+import org.lsc.configuration.AuditType;
+import org.lsc.configuration.LscConfiguration;
 import org.lsc.jndi.JndiModificationType;
 import org.lsc.webai.base.EditSettings;
 
@@ -66,7 +66,7 @@ public class EditAudit extends EditSettings {
 
 	@Property
 	@Persist
-	private Audit audit;
+	private AuditType audit;
 
 
 	@Property
@@ -102,7 +102,7 @@ public class EditAudit extends EditSettings {
 		}
 	}
 
-	public Object initialize(Audit audit) {
+	public Object initialize(AuditType audit) {
 		this.audit = audit;
 		if (audit != null) {
 			auditModel = beanModelSource.createEditModel(audit.getClass(), resources.getMessages());

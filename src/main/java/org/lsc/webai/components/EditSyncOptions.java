@@ -63,8 +63,8 @@ import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.configuration.objects.SyncOptions;
-import org.lsc.configuration.objects.Task;
+import org.lsc.configuration.ForceSyncOptionsType;
+import org.lsc.configuration.TaskType;
 import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
@@ -77,13 +77,13 @@ public class EditSyncOptions extends EditSettings {
 
 	@Property
 	@Persist
-	private SyncOptions syncOptions;
+	private ForceSyncOptionsType syncOptions;
 
 	@InjectPage
 	private EditTask editTask;
 
 	@Parameter
-	private Task task;
+	private TaskType task;
 
 	@Inject
 	private BeanModelSource beanModelSource;
@@ -111,8 +111,8 @@ public class EditSyncOptions extends EditSettings {
 	
 	@BeforeRenderTemplate
 	public void beforeRender() {
-		if(task.getSyncOptions() != null) {
-			this.syncOptions = task.getSyncOptions();
+		if(task.getForceSyncOptions() != null) {
+			this.syncOptions = task.getForceSyncOptions();
 			this.update = true;
 			model = beanModelSource.createEditModel(syncOptions.getClass(), resources.getMessages());
 		}
@@ -127,7 +127,7 @@ public class EditSyncOptions extends EditSettings {
 //		Connection connection = LscConfiguration.getInstance().getConnection(syncOptionsType);
 		try {
 			if(syncOptionsType != null) {
-				syncOptions = (SyncOptions) Class.forName(syncOptionsType).newInstance();
+				syncOptions = (ForceSyncOptionsType) Class.forName(syncOptionsType).newInstance();
 				model = beanModelSource.createEditModel(syncOptions.getClass(), resources.getMessages());
 			} else {
 				return null;
@@ -147,7 +147,7 @@ public class EditSyncOptions extends EditSettings {
 
 	public Map<String, String> getSyncOptionsTypeModel() {
 		Map<String, String> syncOptionsTypeModel = new HashMap<String, String>();
-		for (String className: ClasstypeFinder.getInstance().findExtensions(SyncOptions.class)) {
+		for (String className: ClasstypeFinder.getInstance().findExtensions(ForceSyncOptionsType.class)) {
 			syncOptionsTypeModel.put(className, className.substring(className.lastIndexOf(".")+1));
 		}
 		return syncOptionsTypeModel;
@@ -161,7 +161,7 @@ public class EditSyncOptions extends EditSettings {
 	}
 
 	public Object onSuccessFromEditSyncOptions() {
-		task.setSyncOptions(syncOptions);
+		task.setForceSyncOptions(syncOptions);
 		return editTask.initialize(task);
 	}
 }

@@ -65,10 +65,12 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.configuration.objects.Connection;
-import org.lsc.configuration.objects.LscConfiguration;
-import org.lsc.configuration.objects.Service;
-import org.lsc.configuration.objects.Task;
+import org.lsc.Task;
+import org.lsc.configuration.ConnectionType;
+import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.ServiceType;
+import org.lsc.configuration.ServiceType.Connection;
+import org.lsc.service.IService;
 import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
@@ -77,7 +79,7 @@ public class EditService extends EditSettings {
 
 	@Property
 	@Persist(PersistenceConstants.FLASH)
-	private Service service;
+	private IService service;
 
 	@InjectPage
 	private EditTask editTask;
@@ -140,12 +142,15 @@ public class EditService extends EditSettings {
 	private Class<?> correspondingServiceType;
 	
 	Object onSuccessFromConnectionTypeForm() {
-		Connection connection = LscConfiguration.getConnection(connectionName);
-		if(connection != null && connection.getService(fromSource) != null && !Modifier.isAbstract(connection.getService(fromSource).getModifiers())) {
-			correspondingServiceType = connection.getService(fromSource);
-		} else {
-			return null;
-		}
+		ConnectionType connection = LscConfiguration.getConnection(connectionName);
+		/** TODO
+		 * Fix commented code
+		 */
+//		if(connection != null && connection.getService(fromSource) != null && !Modifier.isAbstract(connection.getService(fromSource).getModifiers())) {
+//			correspondingServiceType = connection.getService(fromSource);
+//		} else {
+//			return null;
+//		}
 		return serviceTypeForm;
 	}
 	
@@ -155,17 +160,20 @@ public class EditService extends EditSettings {
 	
 	@OnEvent(EventConstants.PROGRESSIVE_DISPLAY)
 	public Object onEventFromProgressiveDisplay() {
-		Connection connection = LscConfiguration.getConnection(connectionName);
+		ConnectionType connection = LscConfiguration.getConnection(connectionName);
 		try {
 			if(serviceTypeName != null) {
-				service = (Service) Class.forName(serviceTypeName).newInstance();
-				service.setName(task.getName() + "-" + (fromSource ? "src" : "dst"));
-				service.setConnection(connection);
+				service = (IService) Class.forName(serviceTypeName).newInstance();
+				/** TODO
+				 * Fix commented code
+				 */
+//				service.setName(task.getName() + "-" + (fromSource ? "src" : "dst"));
+//				service.setConnection(connection);
 				model = beanModelSource.createEditModel(service.getClass(), resources.getMessages());
 			}
 			return this.editNewService;
 		} catch (InstantiationException e) {
-//			message = "Cannot instanciate source";
+//			message = "Cannot instantiate source";
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -201,31 +209,35 @@ public class EditService extends EditSettings {
 
 	public Map<String, String> getConnectionsModel() {
 		Map<String, String> connectionsModel = new HashMap<String, String>();
-		for (Connection connection : LscConfiguration.getConnections()) {
-			if(connection.getService(fromSource) != null) {
-				connectionsModel.put(connection.getName(), connection.getName());
-			}
+		for (ConnectionType connection : LscConfiguration.getConnections()) {
+			
+//			if(connection.getService(fromSource) != null) {
+//				connectionsModel.put(connection.getName(), connection.getName());
+//			}
 		}
 		return connectionsModel;
 	}
-
-	Object onSuccessFromEditNewService() {
-		return onSuccessFromEditService();
-	}
-	Object onSuccessFromEditExistingService() {
-		return onSuccessFromEditService();
-	}
-
-	Object onSuccessFromEditService() {
-		if (fromSource) {
-			task.setSourceService(service);
-		} else {
-			task.setDestinationService(service);
-		}
-		return editTask.initialize(task);
-	}
 	
-	Object onActionFromEditTask() {
-		return  editTask.initialize(task);
-	}
+	/** TODO
+	 * Fix commented code
+	 */
+//	Object onSuccessFromEditNewService() {
+//		return onSuccessFromEditService();
+//	}
+//	Object onSuccessFromEditExistingService() {
+//		return onSuccessFromEditService();
+//	}
+//
+//	Object onSuccessFromEditService() {
+//		if (fromSource) {
+//			task.setSourceService(service);
+//		} else {
+//			task.setDestinationService(service);
+//		}
+//		return editTask.initialize(task);
+//	}
+//	
+//	Object onActionFromEditTask() {
+//		return  editTask.initialize(task);
+//	}
 }

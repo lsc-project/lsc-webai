@@ -63,8 +63,8 @@ import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.InjectService;
-import org.lsc.configuration.objects.LscConfiguration;
-import org.lsc.configuration.objects.Task;
+import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.TaskType;
 import org.lsc.service.IAsynchronousService;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.beans.ITriggerTask;
@@ -206,11 +206,14 @@ public class EditJobs extends EditSettings {
 
 	public Map<String, String> getTasksModel() {
 		Map<String, String> tasksModel = new HashMap<String, String>();
-		for (Task task : LscConfiguration.getTasks()) {
-			if (task.getSourceService() != null
-					&& IAsynchronousService.class.isAssignableFrom(task.getSourceService().getImplementation())) {
-				tasksModel.put(task.getName(), task.getName());
-			}
+		for (TaskType task : LscConfiguration.getTasks()) {
+			/** TODO
+			 * Fix commented code
+			 */
+//			if (task.getSourceService() != null
+//					&& IAsynchronousService.class.isAssignableFrom(task.getSourceService().getImplementation())) {
+//				tasksModel.put(task.getName(), task.getName());
+//			}
 		}
 		return tasksModel;
 	}

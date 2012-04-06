@@ -53,8 +53,8 @@ import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.configuration.objects.LscConfiguration;
-import org.lsc.configuration.objects.Task;
+import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.TaskType;
 import org.lsc.webai.base.EditSettings;
 
 /**
@@ -66,7 +66,7 @@ public class EditTask extends EditSettings {
 
 	@Property
 	@Persist
-	private Task task;
+	private TaskType task;
 
 	@SuppressWarnings("unused")
 	@Property
@@ -89,7 +89,7 @@ public class EditTask extends EditSettings {
 		}
 	}
 
-	public Object initialize(Task task) {
+	public Object initialize(TaskType task) {
 		this.task = task;
 		taskModel = beanModelSource.createEditModel(this.task.getClass(), resources.getMessages());
 		taskModel.exclude("sourceService", "destinationService");
