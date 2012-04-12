@@ -50,8 +50,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-import org.lsc.utils.ClasstypeFinder;
+import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.beans.ITriggerTask;
 import org.lsc.webai.beans.JobTaskBean;
 import org.quartz.JobDetail;
@@ -76,24 +77,21 @@ public class LscScheduler {
 	
 	private Scheduler scheduler ;
 	
-	private Map<String, Class<ITriggerTask>> lscTriggerTypes;
+	private Map<String, Class<? extends ITriggerTask>> lscTriggerTypes;
 
-	private Map<Class<? extends Trigger>, Class<ITriggerTask>> quartzTypesEquivalence;
+	private Map<Class<? extends Trigger>, Class<? extends ITriggerTask>> quartzTypesEquivalence;
 	
-	public LscScheduler(ClasstypeFinder cf) throws SchedulerException {
-		this.lscTriggerTypes = new HashMap<String, Class<ITriggerTask>>();
-		this.quartzTypesEquivalence = new HashMap<Class<? extends Trigger>, Class<ITriggerTask>>();
+	public LscScheduler() throws SchedulerException {
+		this.lscTriggerTypes = new HashMap<String, Class<? extends ITriggerTask>>();
+		this.quartzTypesEquivalence = new HashMap<Class<? extends Trigger>, Class<? extends ITriggerTask>>();
 		schedFactory = new StdSchedulerFactory();
 		scheduler = schedFactory.getScheduler();
-		Collection<String> lscTriggerTypes = cf.findExtensions(ITriggerTask.class);
+		Set<Class<? extends ITriggerTask>> lscTriggerTypes = EditSettings.getReflections().getSubTypesOf(ITriggerTask.class);
 		try {
-			for(String lscTriggerType: lscTriggerTypes) {
-				Class<ITriggerTask> lscTriggerTypeClass = (Class<ITriggerTask>) Class.forName(lscTriggerType);
-				this.lscTriggerTypes.put(lscTriggerType, lscTriggerTypeClass);
+			for(Class<? extends ITriggerTask> lscTriggerTypeClass: lscTriggerTypes) {
+				this.lscTriggerTypes.put(lscTriggerTypeClass.getName(), lscTriggerTypeClass);
 				this.quartzTypesEquivalence.put(lscTriggerTypeClass.newInstance().getQuartzTriggerType(), lscTriggerTypeClass);
 			}
-		} catch (ClassNotFoundException e) {
-			LOGGER.error(e.toString(), e);
 		} catch (InstantiationException e) {
 			LOGGER.error(e.toString(), e);
 		} catch (IllegalAccessException e) {
@@ -102,7 +100,7 @@ public class LscScheduler {
 	}
 	
 	public ITriggerTask getLscTrigger(Trigger quartzTrigger) {
-		Class<ITriggerTask> lscTriggerImpl = quartzTypesEquivalence.get(quartzTrigger.getClass());
+		Class<? extends ITriggerTask> lscTriggerImpl = quartzTypesEquivalence.get(quartzTrigger.getClass());
 		ITriggerTask itt = null;
 		try {
 			itt = (ITriggerTask) lscTriggerImpl.newInstance();

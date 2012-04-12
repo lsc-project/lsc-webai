@@ -68,10 +68,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.lsc.Task;
 import org.lsc.configuration.ConnectionType;
 import org.lsc.configuration.LscConfiguration;
-import org.lsc.configuration.ServiceType;
-import org.lsc.configuration.ServiceType.Connection;
 import org.lsc.service.IService;
-import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
 
@@ -196,8 +193,8 @@ public class EditService extends EditSettings {
 	public Map<String, String> getServiceTypesModel() {
 		Map<String, String> servicesModel = new HashMap<String, String>();
 		if(correspondingServiceType != null) {
-			for(String serviceClass : ClasstypeFinder.getInstance().findExtensions(correspondingServiceType)) {
-				servicesModel.put(serviceClass, serviceClass.substring(serviceClass.lastIndexOf(".") + 1));
+            for(Class<?> serviceClass : getReflections().getSubTypesOf(correspondingServiceType)) {
+				servicesModel.put(serviceClass.getName(), serviceClass.getSimpleName());
 			}
 			if(!Modifier.isAbstract(correspondingServiceType.getModifiers())) {
 				String cstname = correspondingServiceType.getName();

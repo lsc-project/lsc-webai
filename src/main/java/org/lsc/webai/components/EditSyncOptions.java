@@ -64,8 +64,8 @@ import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.lsc.configuration.ForceSyncOptionsType;
+import org.lsc.configuration.SyncOptionsType;
 import org.lsc.configuration.TaskType;
-import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
 
@@ -147,8 +147,8 @@ public class EditSyncOptions extends EditSettings {
 
 	public Map<String, String> getSyncOptionsTypeModel() {
 		Map<String, String> syncOptionsTypeModel = new HashMap<String, String>();
-		for (String className: ClasstypeFinder.getInstance().findExtensions(ForceSyncOptionsType.class)) {
-			syncOptionsTypeModel.put(className, className.substring(className.lastIndexOf(".")+1));
+		for (Class<? extends SyncOptionsType> syncOptionsClass: getReflections().getSubTypesOf(SyncOptionsType.class)) {
+			syncOptionsTypeModel.put(syncOptionsClass.getName(), syncOptionsClass.getSimpleName());
 		}
 		return syncOptionsTypeModel;
 	}

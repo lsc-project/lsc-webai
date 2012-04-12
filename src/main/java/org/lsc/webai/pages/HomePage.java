@@ -69,14 +69,14 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
 import org.lsc.Configuration;
 import org.lsc.Launcher;
-import org.lsc.configuration.JaxbXmlConfigurationHelper;
 import org.lsc.configuration.AuditType;
 import org.lsc.configuration.ConnectionType;
+import org.lsc.configuration.JaxbXmlConfigurationHelper;
 import org.lsc.configuration.LscConfiguration;
 import org.lsc.configuration.TaskType;
 import org.lsc.exception.LscConfigurationException;
 import org.lsc.exception.LscException;
-import org.lsc.utils.ClasstypeFinder;
+import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.components.AbstractPathEdition;
 import org.lsc.webai.components.ConsultExecutionLog;
 import org.lsc.webai.services.LscRemoteCommands;
@@ -378,8 +378,8 @@ public class HomePage extends AbstractPathEdition {
 	
 	public SelectModel getAvailableAuditModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(String connectionClass : ClasstypeFinder.getInstance().findExtensions(AuditType.class)) {
-			options.add(new OptionModelImpl(connectionClass.substring(connectionClass.lastIndexOf(".") + 1), connectionClass));
+		for(Class<? extends AuditType> connectionClass : EditSettings.getReflections().getSubTypesOf(AuditType.class)) {
+			options.add(new OptionModelImpl(connectionClass.getSimpleName(), connectionClass.getName()));
 		}
 		return new SelectModelImpl(null, options);
 	}
@@ -441,20 +441,10 @@ public class HomePage extends AbstractPathEdition {
 		return new SelectModelImpl(null, options);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public SelectModel getAvailableConnectionModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(String connectionClassName : ClasstypeFinder.getInstance().findExtensions(ConnectionType.class)) {
-			try {
-				Class<ConnectionType> connectionClass = (Class<ConnectionType>)Class.forName(connectionClassName);
-				options.add(new OptionModelImpl(connectionClass.newInstance().getName(), connectionClass.getCanonicalName()));
-			} catch (ClassNotFoundException e) {
-				LOGGER.error(e.toString(), e);
-			} catch (InstantiationException e) {
-				LOGGER.error(e.toString(), e);
-			} catch (IllegalAccessException e) {
-				LOGGER.error(e.toString(), e);
-			}
+		for(Class<? extends ConnectionType> connectionClass : EditSettings.getReflections().getSubTypesOf(ConnectionType.class)) {
+            options.add(new OptionModelImpl(connectionClass.getSimpleName(), connectionClass.getName()));
 		}
 		return new SelectModelImpl(null, options);
 	}

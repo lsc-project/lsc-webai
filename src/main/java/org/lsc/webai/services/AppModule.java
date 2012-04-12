@@ -45,9 +45,7 @@
  */
 package org.lsc.webai.services;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.Validator;
@@ -59,7 +57,6 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
-import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.utils.CronExpressionTriggerValidator;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
@@ -193,20 +190,20 @@ public class AppModule {
 	// "display/StringsMapBlock", "stringsMap", false));
 	// }
 	
-	public ClasstypeFinder buildClasspathFinder() {
-		ClasstypeFinder cf = ClasstypeFinder.getInstance();
-		URL baseDirectory = this.getClass().getClassLoader().getResource("org/lsc");
-		if(baseDirectory == null) {
-			throw new ExceptionInInitializerError("Unable to locate base classpath ! Aborting ...");
-		}
-		File libSubDirectory = new File(baseDirectory.getFile(), "../../../lib");
-		cf.setupClasspath(libSubDirectory);
-		return cf;
-	}
-	
-	public LscScheduler buildScheduler(ClasstypeFinder cf) {
+//	public ClasstypeFinder buildClasspathFinder() {
+//		ClasstypeFinder cf = ClasstypeFinder.getInstance();
+//		URL baseDirectory = this.getClass().getClassLoader().getResource("org/lsc");
+//		if(baseDirectory == null) {
+//			throw new ExceptionInInitializerError("Unable to locate base classpath ! Aborting ...");
+//		}
+//		File libSubDirectory = new File(baseDirectory.getFile(), "../../../lib");
+//		cf.setupClasspath(libSubDirectory);
+//		return cf;
+//	}
+//	
+	public LscScheduler buildScheduler() {
 		try {
-			return new LscScheduler(cf);
+			return new LscScheduler();
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

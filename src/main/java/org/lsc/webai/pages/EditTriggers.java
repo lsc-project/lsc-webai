@@ -62,7 +62,6 @@ import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.utils.ClasstypeFinder;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.beans.ITriggerTask;
 import org.lsc.webai.beans.JobTaskBean;
@@ -151,8 +150,8 @@ public class EditTriggers extends EditSettings {
 
 	public Map<String, String> getTriggerTypesModel() {
 		Map<String, String> triggerTypesModel = new HashMap<String, String>();
-		for (String triggerType : ClasstypeFinder.getInstance().findExtensions(ITriggerTask.class)) {
-			triggerTypesModel.put(triggerType, triggerType.substring(triggerType.lastIndexOf(".")+1));
+		for (Class<? extends ITriggerTask> triggerType : getReflections().getSubTypesOf(ITriggerTask.class)) {
+			triggerTypesModel.put(triggerType.getName(), triggerType.getSimpleName());
 		}
 		return triggerTypesModel;
 	}

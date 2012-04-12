@@ -45,6 +45,15 @@
  */
 package org.lsc.webai.base;
 
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+
 public class EditSettings {
 
 	public static final String HEADER = "Generated content by LSC Web Management Interface";
@@ -57,5 +66,23 @@ public class EditSettings {
 		} else {
 			return str2;
 		}
+	}
+	
+	private static Reflections reflections;
+	
+	public static Reflections getReflections() {
+	    if(reflections == null) {
+	        Set<URL> urls = new HashSet<URL>();
+	        urls.addAll(ClasspathHelper.forPackage("org.lsc"));
+	        if(System.getProperty("LSC.PLUGINS.PACKAGEPATH") != null) {
+	            String[] pathElements = System.getProperty("LSC.PLUGINS.PACKAGEPATH").split(System.getProperty("path.separator"));
+	            for(String pathElement: pathElements) {
+	                urls.addAll(ClasspathHelper.forPackage(pathElement));
+	            }
+	        }
+	        reflections = new Reflections(new ConfigurationBuilder()
+	            .addUrls(urls).setScanners(new SubTypesScanner()));
+	    }
+        return reflections;
 	}
 }
