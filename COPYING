@@ -46,6 +46,6 @@ This development has been done on top of other components, which are
 licensed under their own license :
 - Tapestry
 - Jetty
-- and others API (TestNG, SLF4J, LogBack, Clapper ClassUtil)
+- and others API (TestNG, SLF4J, LogBack, Reflections)
 -------------------------------------------------------------------------------
 

@@ -1,3 +1,7 @@
+2012-04-12  Sebastien Bahloul  <seb@lsc-project.org>
+
+	* Project updated to fit the current trunk model
+	
 2011-01-04  Sebastien Bahloul  <seb@lsc-project.org>
 
 	* Project can now add/edit task, connection, service and audit. It remains syncoptions
