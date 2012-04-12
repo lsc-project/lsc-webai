@@ -2,331 +2,328 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.lsc</groupId>
-    <artifactId>webai</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
-    <name>Ldap Synchronization Connector Web Administrative Interface</name>
-    <description>Ldap Synchronization Connector administrative interface : configure, monitor, start/stop/force synchronization, consult logs, ...</description>
-    <url>http://lsc-project.org/</url>
-    <issueManagement>
-        <system>Redmine</system>
-        <url>http://tools.lsc-project.org/</url>
-    </issueManagement>
-    <inceptionYear>2009</inceptionYear>
-    
-    <mailingLists>
-        <mailingList>
-            <name>Announcements about Ldap Synchronization Project (LSC) - low-volume</name>
-            <subscribe>lsc-announce-subscribe@lists.lsc-project.org</subscribe>
-            <unsubscribe>lsc-announce-unsubscribe@lists.lsc-project.org</unsubscribe>
-            <post>lsc-announce@lists.lsc-project.org</post>
-            <archive>http://lists.lsc-project.org/listinfo/lsc-announce</archive>
-        </mailingList>
-        <mailingList>
-            <name>General discussions and help for Ldap Synchronization Connector (LSC) - Start here!</name>
-            <subscribe>lsc-users-subscribe@lists.lsc-project.org</subscribe>
-            <unsubscribe>lsc-users-unsubscribe@lists.lsc-project.org</unsubscribe>
-            <post>lsc-users@lists.lsc-project.org</post>
-            <archive>http://lists.lsc-project.org/listinfo/lsc-users</archive>
-        </mailingList>
-        <mailingList>
-            <name>Development and project discussions about Ldap Synchronization Connector (LSC)</name>
-            <subscribe>lsc-dev-subscribe@lists.lsc-project.org</subscribe>
-            <unsubscribe>lsc-dev-unsubscribe@lists.lsc-project.org</unsubscribe>
-            <post>lsc-dev@lists.lsc-project.org</post>
-            <archive>http://lists.lsc-project.org/listinfo/lsc-dev</archive>
-        </mailingList>
-        <mailingList>
-            <name>A commit-list that receives all updates to the code and the wiki (website) for Ldap Synchronization Connector (LSC)</name>
-            <subscribe>lsc-changes-subscribe@lists.lsc-project.org</subscribe>
-            <unsubscribe>lsc-changes-unsubscribe@lists.lsc-project.org</unsubscribe>
-            <post>lsc-changes@lists.lsc-project.org</post>
-            <archive>http://lists.lsc-project.org/listinfo/lsc-changes</archive>
-        </mailingList>
-    </mailingLists>
-    
-    <developers>
-        <developer>
-            <id>sbahloul</id>
-            <name>Sebastien Bahloul</name>
-            <email>seb@lsc-project.org</email>
-        </developer>
-    </developers>
-    
-    <licenses>
-        <license>
-            <name>Affero GPLv3</name>
-            <url>http://www.fsf.org/licensing/licenses/agpl-3.0.html</url>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</connection>
-        <developerConnection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</developerConnection>
-        <url>http://tools.lsc-project.org/projects/lsc/repository/show/lsc-webai</url>
-    </scm>
-    <organization>
-        <name>LSC Project</name>
-        <url>http://lsc-project.org/</url>
-    </organization>
-    
-    <properties>
-        <tapestry-release-version>5.2.5</tapestry-release-version>
-        <slf4j-release-version>1.6.0</slf4j-release-version>
-    </properties>
-    
-    <build>
-        <finalName>lsc-webai</finalName>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>version.properties</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>version.properties</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <!-- <optimize>true</optimize> -->
-                   <encoding>utf-8</encoding>
-                </configuration>
-            </plugin>
-            
-            <!-- Run the application using "mvn jetty:run" -->
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                <version>6.1.22</version>
-                <configuration>
-                    <!-- Log to the console. -->
-                    <requestLog implementation="org.mortbay.jetty.NCSARequestLog">
-                        <!-- This doesn't do anything for Jetty, but is a workaround for a 
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.lsc</groupId>
+	<artifactId>webai</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>Ldap Synchronization Connector Web Administrative Interface</name>
+	<description>Ldap Synchronization Connector administrative interface : configure, monitor, start/stop/force synchronization, consult logs, ...</description>
+	<url>http://lsc-project.org/</url>
+	<issueManagement>
+		<system>Redmine</system>
+		<url>http://tools.lsc-project.org/</url>
+	</issueManagement>
+	<inceptionYear>2009</inceptionYear>
+
+	<mailingLists>
+		<mailingList>
+			<name>Announcements about Ldap Synchronization Project (LSC) - low-volume</name>
+			<subscribe>lsc-announce-subscribe@lists.lsc-project.org</subscribe>
+			<unsubscribe>lsc-announce-unsubscribe@lists.lsc-project.org</unsubscribe>
+			<post>lsc-announce@lists.lsc-project.org</post>
+			<archive>http://lists.lsc-project.org/listinfo/lsc-announce</archive>
+		</mailingList>
+		<mailingList>
+			<name>General discussions and help for Ldap Synchronization Connector (LSC) - Start here!</name>
+			<subscribe>lsc-users-subscribe@lists.lsc-project.org</subscribe>
+			<unsubscribe>lsc-users-unsubscribe@lists.lsc-project.org</unsubscribe>
+			<post>lsc-users@lists.lsc-project.org</post>
+			<archive>http://lists.lsc-project.org/listinfo/lsc-users</archive>
+		</mailingList>
+		<mailingList>
+			<name>Development and project discussions about Ldap Synchronization Connector (LSC)</name>
+			<subscribe>lsc-dev-subscribe@lists.lsc-project.org</subscribe>
+			<unsubscribe>lsc-dev-unsubscribe@lists.lsc-project.org</unsubscribe>
+			<post>lsc-dev@lists.lsc-project.org</post>
+			<archive>http://lists.lsc-project.org/listinfo/lsc-dev</archive>
+		</mailingList>
+		<mailingList>
+			<name>A commit-list that receives all updates to the code and the wiki (website) for Ldap Synchronization Connector (LSC)</name>
+			<subscribe>lsc-changes-subscribe@lists.lsc-project.org</subscribe>
+			<unsubscribe>lsc-changes-unsubscribe@lists.lsc-project.org</unsubscribe>
+			<post>lsc-changes@lists.lsc-project.org</post>
+			<archive>http://lists.lsc-project.org/listinfo/lsc-changes</archive>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+		<developer>
+			<id>sbahloul</id>
+			<name>Sebastien Bahloul</name>
+			<email>seb@lsc-project.org</email>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Affero GPLv3</name>
+			<url>http://www.fsf.org/licensing/licenses/agpl-3.0.html</url>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</connection>
+		<developerConnection>scm:svn:https://lsc-project.org/svn/lsc-webai/trunk/</developerConnection>
+		<url>http://tools.lsc-project.org/projects/lsc/repository/show/lsc-webai</url>
+	</scm>
+	<organization>
+		<name>LSC Project</name>
+		<url>http://lsc-project.org/</url>
+	</organization>
+
+	<properties>
+		<tapestry-release-version>5.2.5</tapestry-release-version>
+		<slf4j-release-version>1.6.0</slf4j-release-version>
+		<jetty.version>6.1.26</jetty.version>
+	</properties>
+
+	<build>
+		<finalName>lsc-webai</finalName>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>version.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>version.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<!-- <optimize>true</optimize> -->
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+				<configuration>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- Run the application using "mvn jetty:run" -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<contextPath>/</contextPath>
+					<!-- Log to the console. -->
+					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
+						<!-- This doesn't do anything for Jetty, but is a workaround for a 
 							Maven bug that prevents the requestLog from being set. -->
-                        <append>true</append>
-                    </requestLog>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7.1</version>
-                <configuration>
-                    <additionalClasspathElements>
-                        <classpathElement>
-                            ${basedir}/src/test/java
+						<append>true</append>
+					</requestLog>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<additionalClasspathElements>
+						<classpathElement>
+							${basedir}/src/test/java
                         </classpathElement>
-                    </additionalClasspathElements>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <tasks>
-                                <replace file="${project.build.outputDirectory}/version.properties" token="@lsc.version@" value="${project.dependencies[0].version}"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.0</version>
-                <configuration>
-                    <buildNumberPropertyName>sources.version</buildNumberPropertyName>
-                    <timestampPropertyName>build.timestamp</timestampPropertyName>
-                    <timestampFormat>{0,date,yyyy-MM-dd HH:mm}</timestampFormat>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-        	<plugins>
-        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        		<plugin>
-        			<groupId>org.eclipse.m2e</groupId>
-        			<artifactId>lifecycle-mapping</artifactId>
-        			<version>1.0.0</version>
-        			<configuration>
-        				<lifecycleMappingMetadata>
-        					<pluginExecutions>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>
-        									org.apache.maven.plugins
+					</additionalClasspathElements>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<configuration>
+							<tasks>
+								<replace file="${project.build.outputDirectory}/version.properties"
+									token="@lsc.version@" value="${project.dependencies[0].version}" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0</version>
+				<configuration>
+					<buildNumberPropertyName>sources.version</buildNumberPropertyName>
+					<timestampPropertyName>build.timestamp</timestampPropertyName>
+					<timestampFormat>{0,date,yyyy-MM-dd HH:mm}</timestampFormat>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
         								</groupId>
-        								<artifactId>
-        									maven-antrun-plugin
+										<artifactId>
+											maven-antrun-plugin
         								</artifactId>
-        								<versionRange>
-        									[1.3,)
+										<versionRange>
+											[1.3,)
         								</versionRange>
-        								<goals>
-        									<goal>run</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore></ignore>
-        							</action>
-        						</pluginExecution>
-        					</pluginExecutions>
-        				</lifecycleMappingMetadata>
-        			</configuration>
-        		</plugin>
-        	</plugins>
-        </pluginManagement>
-    </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.lsc</groupId>
-            <artifactId>lsc-core</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tapestry</groupId>
-            <artifactId>tapestry-core</artifactId>
-            <version>${tapestry-release-version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <!-- A dependency on either JUnit or TestNG is required, or the surefire 
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>org.lsc</groupId>
+			<artifactId>lsc-core</artifactId>
+			<version>trunk-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-core</artifactId>
+			<version>${tapestry-release-version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
 			plugin (which runs the tests) will fail, preventing Maven from packaging 
 			the WAR. Tapestry includes a large number of testing facilities designed 
 			for use with TestNG (http://testng.org/), so it's recommended. -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>5.1</version>
-            <classifier>jdk15</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-release-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>0.9.21</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>0.9.21</version>
-        </dependency>
-        <!-- <dependency> <groupId>org.chenillekit</groupId> <artifactId>chenillekit-quartz</artifactId> 
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>5.1</version>
+			<classifier>jdk15</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-release-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.21</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>0.9.21</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.chenillekit</groupId> <artifactId>chenillekit-quartz</artifactId> 
 			<version>1.2.0</version> </dependency> -->
-		<dependency>
-			<groupId>org.lsc.plugins.connectors</groupId>
-			<artifactId>nis</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.lsc.plugins.connectors</groupId>
-			<artifactId>executable</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<optional>true</optional>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.lsc.plugins.connectors</groupId> -->
-<!-- 			<artifactId>syncrepl</artifactId> -->
-<!-- 			<version>1.0-SNAPSHOT</version> -->
-<!-- 			<optional>true</optional> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> <groupId>org.lsc.plugins.connectors</groupId> <artifactId>nis</artifactId> 
+			<version>1.0-SNAPSHOT</version> <optional>true</optional> </dependency> <dependency> 
+			<groupId>org.lsc.plugins.connectors</groupId> <artifactId>executable</artifactId> 
+			<version>1.0-SNAPSHOT</version> <optional>true</optional> </dependency> --><!-- <dependency> -->
+		<!-- <groupId>org.lsc.plugins.connectors</groupId> -->
+		<!-- <artifactId>syncrepl</artifactId> -->
+		<!-- <version>1.0-SNAPSHOT</version> -->
+		<!-- <optional>true</optional> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>com.howardlewisship</groupId>
 			<artifactId>tapx-core</artifactId>
 			<version>1.1-SNAPSHOT</version>
 		</dependency>
-        <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>1.8.4</version>
-        </dependency>
-        <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.4</version>
-        </dependency>
-<!--               <dependency>
-<groupId>org.got5</groupId>
-<artifactId>tapestry5-jquery</artifactId>
-<version>2.1.0</version>
-               </dependency> -->
-    </dependencies>
-    
-    <repositories>
-        <!-- This can be commented out when the tapestry-release-version is a not 
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.got5</groupId> <artifactId>tapestry5-jquery</artifactId> 
+			<version>2.1.0</version> </dependency> -->
+	</dependencies>
+
+	<repositories>
+		<!-- This can be commented out when the tapestry-release-version is a not 
 			a snapshot. The non-snapshot Tapestry artifacts are distributed through the 
 			central repository at ibiblio. -->
-        
-        <repository>
-            <id>tapestry-snapshots</id>
-            <url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-        </repository>
-        <repository>
-            <id>codehaus.snapshots</id>
-            <url>http://snapshots.repository.codehaus.org</url>
-        </repository>
-        <repository>
-            <id>OpenQA_Release</id>
-            <name>OpenQA Release Repository</name>
-            <url>http://archiva.openqa.org/repository/releases/</url>
-        </repository>
+
+		<repository>
+			<id>codehaus.snapshots</id>
+			<url>http://snapshots.repository.codehaus.org</url>
+		</repository>
+		<repository>
+			<id>OpenQA_Release</id>
+			<name>OpenQA Release Repository</name>
+			<url>http://archiva.openqa.org/repository/releases/</url>
+		</repository>
 		<repository>
 			<id>lsc-site</id>
-            <name>LSC Release Repository</name>
+			<name>LSC Release Repository</name>
 			<url>http://lsc-project.org/maven</url>
 		</repository>
 		<repository>
@@ -334,158 +331,161 @@
 			<name>Tapestry 5 Extensions by Howard Lewis Ship</name>
 			<url>http://howardlewisship.com/snapshot-repository/</url>
 		</repository>
-    <repository>
-        <id>devlab722-repo</id>
-        <url>http://nexus.devlab722.net/nexus/content/repositories/releases
-        </url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
+		<repository>
+			<id>tapestry-snapshots</id>
+			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
+		</repository>
+		<repository>
+			<id>devlab722-repo</id>
+			<url>http://nexus.devlab722.net/nexus/content/repositories/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 
-    </repositories>
-    
-    <pluginRepositories>
-        
-        <!-- As above, this can be commented out when access to the snapshot version 
-			of a Tapestry Maven plugin is not required. -->
-        <pluginRepository>
-            <id>tapestry-snapshots</id>
-            <url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-        </pluginRepository>
-        
-        
-    </pluginRepositories>
-    
-    <distributionManagement>
-        <repository>
-            <id>lsc-project.org</id>
-            <url>scp://lsc-project.org:/var/www/lsc-project/maven</url>
-        </repository>
-        <snapshotRepository>
-            <id>lsc-project.org</id>
-            <url>scp://lsc-project.org:/var/www/lsc-project/maven</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-    
-    <ciManagement>
-        <system>hudson</system>
-        <url>http://build.lsc-project.org/</url>
-        <notifiers>
-            <notifier>
-                <type>mail</type>
-                <sendOnError>true</sendOnError>
-                <sendOnFailure>true</sendOnFailure>
-                <sendOnSuccess>false</sendOnSuccess>
-                <sendOnWarning>false</sendOnWarning>
-                <configuration>
-                    <address>lsc-dev@lsc-project.org</address>
-                </configuration>
-            </notifier>
-        </notifiers>
-    </ciManagement>
-    
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>distribution</id>
-            <activation>
-                <property>
-                    <name>target</name>
-                    <value>distribution</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare-jetty</id>
-                                <phase>package</phase>
-                                <configuration>
-                                    <tasks>
-                                        <property name="execution.path" refid="maven.runtime.classpath" />
-                                        <ant antfile="${basedir}/misc/build.xml" target="prepare-jetty" />
-                                    </tasks>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>clean-jetty</id>
-                                <phase>clean</phase>
-                                <configuration>
-                                    <tasks>
-                                        <property name="execution.path" refid="maven.runtime.classpath" />
-                                        <ant antfile="${basedir}/misc/build.xml" target="clean" />
-                                    </tasks>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/main/assembly/dist.xml</descriptor>
-                                <descriptor>src/main/assembly/src.xml</descriptor>
-                            </descriptors>
-                            <!-- Required since default value is true (Maven 2.2-beta-3) -->
-                            <ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>directory-single</goal>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.izpack</groupId>
-                        <artifactId>izpack-maven-plugin</artifactId>
-                        <version>1.0-alpha-5</version>
-                        <configuration>
-                            <descriptor>${basedir}/src/install/install.xml</descriptor>
-                            <descriptorEncoding>UTF-8</descriptorEncoding>
-                            <fileExtension>jar</fileExtension>
-                            <installerFile>${project.build.directory}/${project.build.finalName}-${project.version}</installerFile>
-                            <izpackBasedir>${project.build.directory}/${project.build.finalName}-dist/${project.build.finalName}-${project.version}</izpackBasedir>
-                        </configuration>
-                        
-                        <executions>
-                            <execution>
-                                <id>standard-installer</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>izpack</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.codehaus.izpack</groupId>
-                                <artifactId>izpack-standalone-compiler</artifactId>
-                                <version>4.3.2</version>
-                            </dependency>
-                        </dependencies>
-                        
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+	</repositories>
+
+<!-- 	<pluginRepositories>
+
+		As above, this can be commented out when access to the snapshot version 
+			of a Tapestry Maven plugin is not required.
+		<pluginRepository>
+			<id>tapestry-snapshots</id>
+			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
+		</pluginRepository>
+
+
+	</pluginRepositories>
+ -->
+	<distributionManagement>
+		<repository>
+			<id>lsc-project.org</id>
+			<url>scp://lsc-project.org:/var/www/lsc-project/maven</url>
+		</repository>
+		<snapshotRepository>
+			<id>lsc-project.org</id>
+			<url>scp://lsc-project.org:/var/www/lsc-project/maven</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<ciManagement>
+		<system>hudson</system>
+		<url>http://build.lsc-project.org/</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<sendOnError>true</sendOnError>
+				<sendOnFailure>true</sendOnFailure>
+				<sendOnSuccess>false</sendOnSuccess>
+				<sendOnWarning>false</sendOnWarning>
+				<configuration>
+					<address>lsc-dev@lsc-project.org</address>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>distribution</id>
+			<activation>
+				<property>
+					<name>target</name>
+					<value>distribution</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>prepare-jetty</id>
+								<phase>package</phase>
+								<configuration>
+									<tasks>
+										<property name="execution.path" refid="maven.runtime.classpath" />
+										<ant antfile="${basedir}/misc/build.xml" target="prepare-jetty" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>clean-jetty</id>
+								<phase>clean</phase>
+								<configuration>
+									<tasks>
+										<property name="execution.path" refid="maven.runtime.classpath" />
+										<ant antfile="${basedir}/misc/build.xml" target="clean" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/dist.xml</descriptor>
+								<descriptor>src/main/assembly/src.xml</descriptor>
+							</descriptors>
+							<!-- Required since default value is true (Maven 2.2-beta-3) -->
+							<ignoreDirFormatExtensions>true</ignoreDirFormatExtensions>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>directory-single</goal>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.izpack</groupId>
+						<artifactId>izpack-maven-plugin</artifactId>
+						<version>1.0-alpha-5</version>
+						<configuration>
+							<descriptor>${basedir}/src/install/install.xml</descriptor>
+							<descriptorEncoding>UTF-8</descriptorEncoding>
+							<fileExtension>jar</fileExtension>
+							<installerFile>${project.build.directory}/${project.build.finalName}-${project.version}</installerFile>
+							<izpackBasedir>${project.build.directory}/${project.build.finalName}-dist/${project.build.finalName}-${project.version}</izpackBasedir>
+						</configuration>
+
+						<executions>
+							<execution>
+								<id>standard-installer</id>
+								<phase>package</phase>
+								<goals>
+									<goal>izpack</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.izpack</groupId>
+								<artifactId>izpack-standalone-compiler</artifactId>
+								<version>4.3.2</version>
+							</dependency>
+						</dependencies>
+
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
