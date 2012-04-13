@@ -173,7 +173,7 @@ public class HomePage extends AbstractPathEdition {
 	}
 	
 	@SetupRender
-	public void setupRender() {
+	public void setupRender() throws LscException {
 		instanceStarted = LscRemoteCommands.bind();
 		if(System.getProperty("LSC_HOME") != null) {
 			lscHomePath = System.getProperty("LSC_HOME");
@@ -192,6 +192,10 @@ public class HomePage extends AbstractPathEdition {
 				message = "Failed to load configuration (" + e + ")";
 				LOGGER.error(e.toString(),e);
 			}
+		}
+		// If not initialized, try to
+		if(!LscConfiguration.isInitialized()) {
+            Configuration.setUp(lscConfigurationPath, false);
 		}
 	}
 	

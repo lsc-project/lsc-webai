@@ -10,6 +10,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
+import org.lsc.exception.LscException;
 import org.lsc.webai.components.AbstractPathEdition;
 
 public class Index extends AbstractPathEdition {
@@ -34,7 +35,7 @@ public class Index extends AbstractPathEdition {
 	
 	
 	@OnEvent( component = EventConstants.PROGRESSIVE_DISPLAY )
-	Object onEventFromProgressiveDisplay() {
+	Object onEventFromProgressiveDisplay() throws LscException {
 		homePage.setupRender();
 		return homePage;
 //		if(lscHome != null) {
