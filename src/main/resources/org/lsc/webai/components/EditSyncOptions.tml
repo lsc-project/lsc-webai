@@ -3,7 +3,7 @@
 
 	<t:if test="update">
 		<h2>${message:lsc.editsyncoptions.title}</h2>
-		<t:beaneditform t:id="editExistingSyncOptions" t:object="syncOptions" t:model="model" t:add="otherSettings">
+<!-- 		<t:beaneditform t:id="editExistingSyncOptions" t:object="syncOptions" t:model="model" t:add="otherSettings">
 			<t:parameter name="otherSettings">
 				<t:mapEditor t:id="otherSettingsEditor"
                      		t:eventsContextSuffix="literal:otherSettings"
@@ -15,7 +15,7 @@
                      	/> 
 			</t:parameter>
 		</t:beaneditform>			
-
+ -->
 		<p:else>
 			<h2>Set the synchronization options</h2>
 
