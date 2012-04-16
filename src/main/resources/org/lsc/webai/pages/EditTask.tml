@@ -16,7 +16,7 @@
 			<li>
 				<t:if test="task.name">
 					<a href="#tabs-srcService">
-						<t:if test="task.sourceService">
+						<t:if test="sourceService">
 							Edit the source service settings
 							<p:else>
 								Create a new source service
@@ -28,7 +28,7 @@
 			<li>
 				<t:if test="task.name">
 					<a href="#tabs-dstService">
-						<t:if test="task.destinationService">
+						<t:if test="destinationService">
 							Edit the destination service settings
 							<p:else>Create a new destination service</p:else>
 						</t:if>
@@ -38,7 +38,7 @@
 			<li>
 				<t:if test="task.name">
 					<a href="#tabs-syncOptions">
-						<t:if test="task.syncOptions">
+						<t:if test="syncOptions">
 							${message:lsc.edittask.syncoptions.edit}
 							<p:else>
 								${message:lsc.edittask.syncoptions.create}
@@ -53,7 +53,7 @@
 				<font color="red">${message}</font>
 			</if>
 			<t:beaneditform t:object="task"
-				reorder="name,bean,customLibrary,syncHook,cleanHook" />
+				reorder="name,bean,syncHook,cleanHook" /><!-- customLibrary, -->
 		</div>
 		<t:if test="task.name">
 			<div id="tabs-srcService">
