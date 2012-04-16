@@ -65,7 +65,6 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.lsc.configuration.LscConfiguration;
 import org.lsc.configuration.TaskType;
-import org.lsc.service.IAsynchronousService;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.beans.ITriggerTask;
 import org.lsc.webai.beans.JobTaskBean;
@@ -79,6 +78,7 @@ import org.quartz.SchedulerFactory;
  * 
  * @author Sebastien Bahloul &lt;seb@lsc-project.org&gt;
  */
+@SuppressWarnings("unused")
 public class EditJobs extends EditSettings {
 
 	@Persist
@@ -91,7 +91,6 @@ public class EditJobs extends EditSettings {
 	@Persist(PersistenceConstants.FLASH)
 	private JobTaskBean job;
 
-	@SuppressWarnings("unused")
 	@Property
 	@Persist("flash")
 	private String message;
@@ -207,13 +206,7 @@ public class EditJobs extends EditSettings {
 	public Map<String, String> getTasksModel() {
 		Map<String, String> tasksModel = new HashMap<String, String>();
 		for (TaskType task : LscConfiguration.getTasks()) {
-			/** TODO
-			 * Fix commented code
-			 */
-//			if (task.getSourceService() != null
-//					&& IAsynchronousService.class.isAssignableFrom(task.getSourceService().getImplementation())) {
-//				tasksModel.put(task.getName(), task.getName());
-//			}
+			tasksModel.put(task.getName(), task.getName());
 		}
 		return tasksModel;
 	}
