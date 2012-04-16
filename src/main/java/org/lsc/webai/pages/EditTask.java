@@ -54,6 +54,8 @@ import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.ServiceType;
+import org.lsc.configuration.SyncOptionsType;
 import org.lsc.configuration.TaskType;
 import org.lsc.webai.base.EditSettings;
 
@@ -83,7 +85,16 @@ public class EditTask extends EditSettings {
 	@Inject
 	private ComponentResources resources;
 	
-	void onActivate(Object[] contextValues) {
+    @Property
+	private ServiceType sourceService;
+	
+    @Property
+    private ServiceType destinationService;
+    
+    @Property
+    private SyncOptionsType syncOptions;
+
+    void onActivate(Object[] contextValues) {
 		if(contextValues.length > 0) {
 			initialize(LscConfiguration.getTask((String)contextValues[0]));
 		}
@@ -93,6 +104,9 @@ public class EditTask extends EditSettings {
 		this.task = task;
 		taskModel = beanModelSource.createEditModel(this.task.getClass(), resources.getMessages());
 		taskModel.exclude("sourceService", "destinationService");
+		sourceService = LscConfiguration.getSourceService(task);
+        destinationService = LscConfiguration.getDestinationService(task);
+        syncOptions = LscConfiguration.getSyncOptions(task);
 		return this;
 	}
 

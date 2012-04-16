@@ -65,24 +65,25 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.Task;
 import org.lsc.configuration.ConnectionType;
 import org.lsc.configuration.LscConfiguration;
-import org.lsc.service.IService;
+import org.lsc.configuration.ServiceType;
+import org.lsc.configuration.TaskType;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
 
+@SuppressWarnings("unused")
 public class EditService extends EditSettings {
 
 	@Property
 	@Persist(PersistenceConstants.FLASH)
-	private IService service;
+	private ServiceType service;
 
 	@InjectPage
 	private EditTask editTask;
 
 	@Parameter(required=true)
-	private Task task;
+	private TaskType task;
 
 	@Property
 	@Parameter
@@ -94,7 +95,6 @@ public class EditService extends EditSettings {
 	@Inject
 	private ComponentResources resources;
 	
-	@SuppressWarnings("unused")
 	@Property
 	@Persist(PersistenceConstants.FLASH)
 	private BeanModel<?> model;
@@ -114,7 +114,6 @@ public class EditService extends EditSettings {
 	@InjectComponent
 	private BeanEditForm editNewService;
 	
-	@SuppressWarnings("unused")
 	@Property
 	private boolean update;
 	
@@ -123,9 +122,9 @@ public class EditService extends EditSettings {
 		if(task != null) {
 			if(service == null) {
 				if(fromSource) {
-					service = task.getSourceService();
+					service = LscConfiguration.getSourceService(task);
 				} else {
-					service = task.getDestinationService();
+					service = LscConfiguration.getDestinationService(task);
 				}
 			}
 			if(service != null) {
@@ -160,7 +159,7 @@ public class EditService extends EditSettings {
 		ConnectionType connection = LscConfiguration.getConnection(connectionName);
 		try {
 			if(serviceTypeName != null) {
-				service = (IService) Class.forName(serviceTypeName).newInstance();
+				service = (ServiceType  ) Class.forName(serviceTypeName).newInstance();
 				/** TODO
 				 * Fix commented code
 				 */
