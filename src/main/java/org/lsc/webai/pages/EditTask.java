@@ -57,6 +57,7 @@ import org.lsc.configuration.LscConfiguration;
 import org.lsc.configuration.ServiceType;
 import org.lsc.configuration.SyncOptionsType;
 import org.lsc.configuration.TaskType;
+import org.lsc.exception.LscConfigurationException;
 import org.lsc.webai.base.EditSettings;
 
 /**
@@ -94,13 +95,13 @@ public class EditTask extends EditSettings {
     @Property
     private SyncOptionsType syncOptions;
 
-    void onActivate(Object[] contextValues) {
+    void onActivate(Object[] contextValues) throws LscConfigurationException {
 		if(contextValues.length > 0) {
 			initialize(LscConfiguration.getTask((String)contextValues[0]));
 		}
 	}
 
-	public Object initialize(TaskType task) {
+	public Object initialize(TaskType task) throws LscConfigurationException {
 		this.task = task;
 		taskModel = beanModelSource.createEditModel(this.task.getClass(), resources.getMessages());
 		taskModel.exclude("sourceService", "destinationService");

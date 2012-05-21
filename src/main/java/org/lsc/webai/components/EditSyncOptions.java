@@ -57,7 +57,6 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
@@ -66,6 +65,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.lsc.configuration.ForceSyncOptionsType;
 import org.lsc.configuration.SyncOptionsType;
 import org.lsc.configuration.TaskType;
+import org.lsc.exception.LscConfigurationException;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
 
@@ -91,9 +91,7 @@ public class EditSyncOptions extends EditSettings {
 	@Inject
 	private ComponentResources resources;
 	
-	@SuppressWarnings("unused")
 	@Property
-	@Retain
 	private BeanModel<?> model;
 
 	@Property
@@ -153,14 +151,14 @@ public class EditSyncOptions extends EditSettings {
 		return syncOptionsTypeModel;
 	}
 
-	public Object onSuccessFromEditNewSyncOptions() {
+	public Object onSuccessFromEditNewSyncOptions() throws LscConfigurationException {
 		return onSuccessFromEditSyncOptions();
 	}
-	public Object onSuccessFromEditExistingSyncOptions() {
+	public Object onSuccessFromEditExistingSyncOptions() throws LscConfigurationException {
 		return onSuccessFromEditSyncOptions();
 	}
 
-	public Object onSuccessFromEditSyncOptions() {
+	public Object onSuccessFromEditSyncOptions() throws LscConfigurationException {
 		task.setForceSyncOptions(syncOptions);
 		return editTask.initialize(task);
 	}

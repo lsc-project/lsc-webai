@@ -335,7 +335,7 @@ public class HomePage extends AbstractPathEdition {
 		return getTasksModel().getOptions().size() >= 2;
 	}
 	
-	public Object onSuccessFromEditTask() {
+	public Object onSuccessFromEditTask() throws LscConfigurationException {
 		switch(action) {
 			case UPDATE:
 				return editTask.initialize(LscConfiguration.getTask(taskName));
@@ -355,7 +355,7 @@ public class HomePage extends AbstractPathEdition {
 		action = ActionType.DELETE;
 	}
 	
-	public Object onActionFromCreateTask() {
+	public Object onActionFromCreateTask() throws LscConfigurationException {
 		return editTask.initialize(new TaskType());
 	}
 	
