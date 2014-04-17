@@ -46,9 +46,9 @@
 package org.lsc.webai.pages;
 
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
@@ -74,13 +74,10 @@ public class EditAudit extends EditSettings {
 	@SuppressWarnings("unused")
 	private String message;
 
-//	@InjectComponent
-//	private EditService editService;
-
 	@Property
 	@SuppressWarnings("unused")
-	@Retain
-	private BeanModel auditModel;
+	@Persist(PersistenceConstants.FLASH)
+	private BeanModel<?> auditModel;
 
 	@Inject
 	private BeanModelSource beanModelSource;
@@ -112,6 +109,8 @@ public class EditAudit extends EditSettings {
 		return this;
 	}
 
+	
+	
 	public Object onSuccess() {
 		if(LscConfiguration.getAudit(audit.getName()) == null) {
 			LscConfiguration.addAudit(audit);

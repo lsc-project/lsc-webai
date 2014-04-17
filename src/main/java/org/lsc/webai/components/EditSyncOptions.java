@@ -45,11 +45,15 @@
  */
 package org.lsc.webai.components;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.BeforeRenderTemplate;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -59,10 +63,13 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
+import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.lsc.configuration.ForceSyncOptionsType;
+import org.lsc.configuration.DatasetType;
+import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.PropertiesBasedSyncOptionsType;
 import org.lsc.configuration.SyncOptionsType;
 import org.lsc.configuration.TaskType;
 import org.lsc.exception.LscConfigurationException;
@@ -76,8 +83,8 @@ import org.lsc.webai.pages.EditTask;
 public class EditSyncOptions extends EditSettings {
 
 	@Property
-	@Persist
-	private ForceSyncOptionsType syncOptions;
+	@Persist(PersistenceConstants.FLASH)
+	private SyncOptionsType syncOptions;
 
 	@InjectPage
 	private EditTask editTask;
@@ -91,11 +98,27 @@ public class EditSyncOptions extends EditSettings {
 	@Inject
 	private ComponentResources resources;
 	
+	@InjectComponent
+	private Grid datasetsGrid;
+	
 	@Property
+    @Persist(PersistenceConstants.FLASH)
 	private BeanModel<?> model;
 
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private DatasetType datasetGridRow;
+
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private DatasetType dataset;
+
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private BeanModel<?>  datasetModel;
+
 	@Property
-	@Persist
+    @Persist(PersistenceConstants.FLASH)
 	private String syncOptionsType;
 	
 	@InjectComponent
@@ -104,7 +127,11 @@ public class EditSyncOptions extends EditSettings {
 	@InjectComponent
 	private BeanEditForm editNewSyncOptions;
 	
-	@Property
+	@InjectComponent
+	private BeanEditForm editNewDataset;
+	
+	@SuppressWarnings("unused")
+    @Property
 	private boolean update;
 	
 	@BeforeRenderTemplate
@@ -112,21 +139,31 @@ public class EditSyncOptions extends EditSettings {
 		if(task.getForceSyncOptions() != null) {
 			this.syncOptions = task.getForceSyncOptions();
 			this.update = true;
-			model = beanModelSource.createEditModel(syncOptions.getClass(), resources.getMessages());
+		} else if (task.getPropertiesBasedSyncOptions() != null) {
+            this.syncOptions = task.getPropertiesBasedSyncOptions();
+            this.update = true;
+        } else if (task.getPluginSyncOptions() != null) {
+            this.syncOptions = task.getPluginSyncOptions();
+            this.update = true;
 		}
-	}
+	    if(syncOptions != null) {
+            model = beanModelSource.createEditModel(syncOptions.getClass(), resources.getMessages());
+            model.exclude("id"); 
+	    }
+ 	}
 
+	
 	Object onSuccessFromTypeForm() {
 		return progressiveDisplay;
 	}
 	
 	@OnEvent(EventConstants.PROGRESSIVE_DISPLAY)
 	public Object onEventFromProgressiveDisplay() {
-//		Connection connection = LscConfiguration.getInstance().getConnection(syncOptionsType);
 		try {
 			if(syncOptionsType != null) {
-				syncOptions = (ForceSyncOptionsType) Class.forName(syncOptionsType).newInstance();
+				syncOptions = (SyncOptionsType) Class.forName(syncOptionsType).newInstance();
 				model = beanModelSource.createEditModel(syncOptions.getClass(), resources.getMessages());
+				model.exclude("id"); 
 			} else {
 				return null;
 			}
@@ -142,7 +179,7 @@ public class EditSyncOptions extends EditSettings {
 		}
 		return this.editNewSyncOptions;
 	}
-
+	
 	public Map<String, String> getSyncOptionsTypeModel() {
 		Map<String, String> syncOptionsTypeModel = new HashMap<String, String>();
 		for (Class<? extends SyncOptionsType> syncOptionsClass: getReflections().getSubTypesOf(SyncOptionsType.class)) {
@@ -150,7 +187,7 @@ public class EditSyncOptions extends EditSettings {
 		}
 		return syncOptionsTypeModel;
 	}
-
+	
 	public Object onSuccessFromEditNewSyncOptions() throws LscConfigurationException {
 		return onSuccessFromEditSyncOptions();
 	}
@@ -159,7 +196,83 @@ public class EditSyncOptions extends EditSettings {
 	}
 
 	public Object onSuccessFromEditSyncOptions() throws LscConfigurationException {
-		task.setForceSyncOptions(syncOptions);
+	    LscConfiguration.setSyncOptions(task, syncOptions);
 		return editTask.initialize(task);
 	}
+
+    public boolean isPropertiesBasedSyncOptions() {
+        return syncOptions != null && syncOptions instanceof PropertiesBasedSyncOptionsType;
+    }
+
+    public Set<DatasetType> getPbsoDataset() {
+        if(syncOptions == null) {
+            syncOptions = task.getPropertiesBasedSyncOptions();
+        }
+        TreeSet<DatasetType> datasetSet = new TreeSet<DatasetType>(new DatasetComparator());
+        datasetSet.addAll(task.getPropertiesBasedSyncOptions().getDataset());
+        return datasetSet;
+    }
+    
+    @OnEvent(component="editNewDataset", value=EventConstants.CANCELED)
+    public Object onCancelFromEditNewDataset() {
+        dataset = null;
+        return datasetsGrid;
+    }
+    
+    @OnEvent(component="editNewDataset", value=EventConstants.SUCCESS)
+    public Object onSuccessFromEditNewDataset() {
+        if(dataset != null) {
+            DatasetType matchedDataset = null;
+            for(DatasetType localDataset: getPbsoDataset()) {
+                if(localDataset.getName().equals(dataset.getName())) {
+                    matchedDataset = localDataset;
+                    break;
+                }
+            }
+            if(matchedDataset != null) {
+               getPbsoDataset().remove(matchedDataset); 
+            }
+             getPbsoDataset().add(dataset);
+        }
+        return datasetsGrid;
+    }
+    
+    @OnEvent(component="deleteDatasetAction", value=EventConstants.ACTION)
+    Object OnActionFromDeleteTriggerAction(String datasetName) {
+        for(DatasetType datasetToEdit: getPbsoDataset()) {
+            if(datasetToEdit.getName().equals(datasetName)) {
+                dataset = datasetToEdit;
+                break;
+            }
+        }
+        getPbsoDataset().remove(dataset);
+        return datasetsGrid;
+    }
+
+    @OnEvent(component="editDatasetAction", value=EventConstants.ACTION)
+    Object OnActionFromEditTriggerAction(String triggerId) {
+        for(DatasetType datasetToEdit: getPbsoDataset()) {
+            if(datasetToEdit.getName().equals(triggerId)) {
+                dataset = new DatasetType();
+                dataset.setCreateValues(datasetToEdit.getCreateValues());
+                dataset.setDefaultValues(datasetToEdit.getDefaultValues());
+                dataset.setDelimiter(datasetToEdit.getDelimiter());
+                dataset.setForceValues(datasetToEdit.getForceValues());
+                dataset.setId(datasetToEdit.getId());
+                dataset.setName(datasetToEdit.getName());
+                dataset.setPolicy(datasetToEdit.getPolicy());
+                break;
+            }
+        }
+        return editNewDataset;
+    }
+}
+
+class DatasetComparator implements Comparator<DatasetType> {
+
+    @Override
+    public int compare(DatasetType arg0, DatasetType arg1) {
+        return arg0.getName().compareTo(arg1.getName());
+    }
+    
 }

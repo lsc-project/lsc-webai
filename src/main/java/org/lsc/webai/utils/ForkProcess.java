@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,173 +60,183 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Handle Java fork processing
+ * 
  * @author Sebastien Bahloul &lt;seb@lsc-project.org&gt;
  */
 public class ForkProcess implements Runnable {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(ForkProcess.class); 
+    private static Logger    LOGGER = LoggerFactory.getLogger(ForkProcess.class);
 
-	private Process process;
+    private Process          process;
 
-	private DataOutputStream output;
+    private DataOutputStream output;
 
-	private BufferedReader input;
+    private BufferedReader   input;
 
-	private BufferedReader error;
-	
-	private int debugPort;
-	
-	private boolean debug;
-	
-	private ProcessBuilder builder;
+    private BufferedReader   error;
 
-	public ForkProcess() {
-		debug = false;
-	}
+    private int              debugPort;
 
-	public ForkProcess(int debugPort) {
-		if(debugPort > 0) {
-			debug = true;
-			this.debugPort = debugPort;
-		}
-	}
+    private boolean          debug;
 
-	public void fork(String className, String[] params, Map<String, String> env) {
-		builder = new ProcessBuilder();
-		builder.directory(new File(this.getClass().getClassLoader().getResource(".").getPath()));
-		List<String> commands = new ArrayList<String>();
-		if(SystemUtils.IS_OS_WINDOWS) {
-			if(debug) {
-				commands.add("c:\\windows\\system32\\cmd.exe");
-				commands.add("/K");
-			}
-			commands.add('"' + System.getProperty("java.home") + "\\bin\\java.exe" + '"');
-		} else {
-			commands.add(System.getProperty("java.home") + "/bin/java");
-		}
-		commands.add("-classpath ");
-		// Add the Run Jetty Run classpath
-		commands.add(getClasspath());
-		for(Entry<String, String> envItem : env.entrySet()) {
-			commands.add("-D" + envItem.getKey() + "=" + envItem.getValue());
-		}
-		if(debug) {
-			commands.add("-Xdebug");
-			commands.add("-Xrunjdwp:transport=dt_socket,address=" + debugPort + ",server=y,suspend=y");
-		}
-		commands.add(className);
-		Collections.addAll(commands, params);
-		builder.command(commands);
-		builder.environment().putAll(env);
-		this.run();
-		while(process == null) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}
-		}
-		output = new DataOutputStream(process.getOutputStream());
-		input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-	}
-	
-	public void run() {
-		try {
-			process = builder.start();
-		} catch (IOException e) {
-			LOGGER.error(e.toString(),e);
-		}
-	}
-	
-	public String getMessages() {
-		String messages = readMessages(input);
-		input = null;
-		return messages;
-	}
+    private ProcessBuilder   builder;
 
-	public String getErrorMessages() {
-		String messages = readMessages(error);
-		error = null;
-		return messages;
-	}
-	
-	private String readMessages(BufferedReader input) {
-		StringBuffer messages = new StringBuffer();
-		try {
-			if(input != null) {
-				String line = null;
-				while(input.ready() && (line = input.readLine()) != null) {
-					messages.append(line.trim()).append("\n");
-				}
-			}
-			return messages.toString();
-		} catch (IOException e) {
-			LOGGER.error(e.toString(),e);
-			return null;
-		} finally {
-			try {
-				if(input != null) {
-					input.close();
-				}
-			} catch (IOException e) {
-				LOGGER.error(e.toString(),e);
-			}
-		}
-	}
+    public ForkProcess() {
+        debug = false;
+    }
 
-	public synchronized void close() {
-		try {
-			if(output != null) {
-				output.close(); 
-				output = null;
-			}
-			if(input != null) {
-				input.close(); 
-				input = null;
-			}
-			if(error != null) {
-				error.close(); 
-				error = null;
-			}
-		} catch (IOException ignore) {
-		}
-		if(process != null) {
-			process.destroy();
-		}
-	}
-	
-	private String getClasspath() {
-		// Hack to handle Run Jetty Run Eclipse plugin
-		String rjrClassPath = System.getProperty("rjrclasspath", null);
-		if(rjrClassPath != null) {
-			try {
-				return new URI(rjrClassPath).getPath();
-			} catch (URISyntaxException e) {
-			}
-		}
-		if(System.getProperty("LSC_HOME") != null) {
-			StringBuffer cp = new StringBuffer();
-			File lscHome = new File(System.getProperty("LSC_HOME"), "jetty" + File.separator + "webapps" + File.separator + "lsc-webai" + File.separator + "WEB-INF" + File.separator + "lib");
-			if(lscHome.exists() && lscHome.isDirectory()) {
-				for(String filename: lscHome.list(new SuffixFileFilter(".jar"))) {
-					if(cp.length() > 0) {
-						if(SystemUtils.IS_OS_WINDOWS) {
-							cp.append(";");
-						} else {
-							cp.append(":");
-						}
-					}
-					cp.append(lscHome.getAbsolutePath() + File.separator + filename);
-				}
-				return cp.toString();
-			}
-		}
-		return System.getProperty("java.class.path", null);
-	}
+    public ForkProcess(int debugPort) {
+        if (debugPort > 0) {
+            debug = true;
+            this.debugPort = debugPort;
+        }
+    }
+
+    public void fork(String className, String[] params, Map<String, String> env) {
+        builder = new ProcessBuilder();
+        builder.directory(new File(this.getClass().getClassLoader().getResource(".").getPath()));
+        List<String> commands = new ArrayList<String>();
+        if (SystemUtils.IS_OS_WINDOWS) {
+            commands.add("\"" + System.getProperty("java.home") + "\\bin\\java.exe\"");
+        } else {
+            commands.add(System.getProperty("java.home") + "/bin/java");
+        }
+        commands.add("-classpath");
+        // Add the Run Jetty Run classpath
+        commands.add(getClasspath());
+        for (Entry<String, String> envItem : env.entrySet()) {
+            commands.add("-D" + envItem.getKey() + "=" + envItem.getValue());
+        }
+        if (debug) {
+            commands.add("-Xdebug");
+            commands.add("-Xrunjdwp:transport=dt_socket,address=" + debugPort + ",server=y,suspend=y");
+        }
+        commands.add(className);
+        Collections.addAll(commands, params);
+        if(debug) {
+            List<String> interpretor = new ArrayList<String>();
+            if (SystemUtils.IS_OS_WINDOWS) {
+                interpretor.add(System.getenv("SystemRoot") + "\\system32\\cmd.exe");
+                interpretor.add("/U");
+                interpretor.add("/K");
+                interpretor.add(StringUtils.join(commands, " "));
+            } else {
+                interpretor.add("/bin/sh");
+                interpretor.add("-c");
+                interpretor.add(StringUtils.join(commands, " "));
+            }
+            builder.command(interpretor);
+        } else {
+            builder.command(commands);
+        }
+        builder.environment().putAll(env);
+        this.run();
+        while (process == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }
+        output = new DataOutputStream(process.getOutputStream());
+        input = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("UTF-8")));
+        error = new BufferedReader(new InputStreamReader(process.getErrorStream(), Charset.forName("UTF-8")));
+    }
+
+    public void run() {
+        try {
+            process = builder.start();
+        } catch (IOException e) {
+            LOGGER.error(e.toString(), e);
+        }
+    }
+
+    public String getMessages() {
+        String messages = readMessages(input);
+        // input = null;
+        return messages;
+    }
+
+    public String getErrorMessages() {
+        String messages = readMessages(error);
+        // error = null;
+        return messages;
+    }
+
+    private String readMessages(BufferedReader input) {
+        StringBuffer messages = new StringBuffer();
+        try {
+            if (input != null) {
+                String line = null;
+                while (input.ready() && (line = input.readLine()) != null && !"".equals(line)) {
+                    messages.append(line.trim()).append("\n");
+                }
+            }
+            return messages.toString();
+        } catch (IOException e) {
+            LOGGER.error(e.toString(), e);
+            return null;
+        } finally {
+            // try {
+            // if(input != null) {
+            // input.close();
+            // }
+            // } catch (IOException e) {
+            // LOGGER.error(e.toString(),e);
+            // }
+        }
+    }
+
+    public synchronized void close() {
+        try {
+            if (output != null) {
+                output.close();
+                output = null;
+            }
+            if (input != null) {
+                input.close();
+                input = null;
+            }
+            if (error != null) {
+                error.close();
+                error = null;
+            }
+        } catch (IOException ignore) {}
+        if (process != null) {
+            process.destroy();
+        }
+    }
+
+    private String getClasspath() {
+        // Hack to handle Run Jetty Run Eclipse plugin
+        String rjrClassPath = System.getProperty("rjrclasspath", null);
+        if (rjrClassPath != null) {
+            try {
+                return new URI(rjrClassPath).getPath();
+            } catch (URISyntaxException e) {}
+        }
+        if (System.getProperty("LSC_HOME") != null) {
+            StringBuffer cp = new StringBuffer();
+            File lscHome = new File(System.getProperty("LSC_HOME"), "jetty" + File.separator + "webapps" + File.separator + "lsc-webai" + File.separator + "WEB-INF" + File.separator + "lib");
+            if (lscHome.exists() && lscHome.isDirectory()) {
+                for (String filename : lscHome.list(new SuffixFileFilter(".jar"))) {
+                    if (cp.length() > 0) {
+                        if (SystemUtils.IS_OS_WINDOWS) {
+                            cp.append(";");
+                        } else {
+                            cp.append(":");
+                        }
+                    }
+                    cp.append(lscHome.getAbsolutePath() + File.separator + filename);
+                }
+                return cp.toString();
+            }
+        }
+        return System.getProperty("java.class.path", null);
+    }
 }

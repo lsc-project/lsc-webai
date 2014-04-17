@@ -9,7 +9,12 @@ import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CronTriggerTask implements ITriggerTask {
+
+    private static Logger log = LoggerFactory.getLogger(CronTriggerTask.class);
 
 	@Property
 	private String id;
@@ -43,9 +48,10 @@ public class CronTriggerTask implements ITriggerTask {
 			ct.setFireInstanceId(id);
 			ct.setJobName(getJob().getName());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            log.error("Unable to parse the cron expression: " + cronExpression);
+            log.debug(e.toString(), e);
+            return null;
+        }
 		return ct;
 	}
 

@@ -49,7 +49,6 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
@@ -77,7 +76,7 @@ public class EditTask extends EditSettings {
 	private String message;
 	
 	@Property
-	@Retain
+    @Persist(PersistenceConstants.FLASH)
 	private BeanModel<?> taskModel;
 
 	@Inject
@@ -87,12 +86,15 @@ public class EditTask extends EditSettings {
 	private ComponentResources resources;
 	
     @Property
+    @Persist(PersistenceConstants.FLASH)
 	private ServiceType sourceService;
 	
     @Property
+    @Persist(PersistenceConstants.FLASH)
     private ServiceType destinationService;
     
     @Property
+    @Persist(PersistenceConstants.FLASH)
     private SyncOptionsType syncOptions;
 
     void onActivate(Object[] contextValues) throws LscConfigurationException {
@@ -104,13 +106,13 @@ public class EditTask extends EditSettings {
 	public Object initialize(TaskType task) throws LscConfigurationException {
 		this.task = task;
 		taskModel = beanModelSource.createEditModel(this.task.getClass(), resources.getMessages());
-		taskModel.exclude("sourceService", "destinationService");
+		taskModel.exclude("id", "sourceService", "destinationService", "syncOptions");
 		sourceService = LscConfiguration.getSourceService(task);
         destinationService = LscConfiguration.getDestinationService(task);
         syncOptions = LscConfiguration.getSyncOptions(task);
 		return this;
 	}
-
+	
 	public Object onSuccess() {
 		if(LscConfiguration.getTask(task.getName()) == null) {
 			LscConfiguration.addTask(task);

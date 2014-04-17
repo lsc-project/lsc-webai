@@ -17,7 +17,7 @@
 			<h3>
 				<a href="#">${message:lsc.index.config}</a>
 			</h3>
-			Lsc configuration revision : 
+			LSC configuration revision : 
 			<t:if test="lscConfiguration.revision"> ${lscConfiguration.revision}
 				<p:else>initialized from old properties configuration file format</p:else>
 			</t:if>
@@ -71,11 +71,11 @@
 							</t:form>
 						</li>
 					</t:if>
-					<t:if test="isTasksModelAsLeastSizeTwo()">
+					<!-- t:if test="isTasksModelAsLeastSizeTwo()" -->
 						<li>
 							[<t:actionlink t:id="createTask">${message:lsc.index.createtask}</t:actionlink>]
 						</li>
-					</t:if>
+					<!-- /t:if -->
 				</ul>
 				<ul>
 					<t:if test="auditsModel.getOptions().isEmpty()" negate="true">
@@ -99,12 +99,6 @@
 					</li>
 				</ul>
 			</div>
-		</div>
-		<div id="tabs-logs">
-			<h3>
-				<a href="#">${message:lsc.index.logs}</a>
-			</h3>
-			<div t:type="ConsultExecutionLog" />
 		</div>
 		<div id="tabs-status">
 			<h3>
@@ -196,6 +190,12 @@
 					</t:if>
 				</div>
 			</div>
+		</div>
+		<div id="tabs-logs">
+			<h3>
+				<a href="#">${message:lsc.index.logs}</a>
+			</h3>
+			<div t:type="ConsultExecutionLog" />
 		</div>
 		<div id="tabs-scheduler">
 			<div t:type="EditJobs"/>

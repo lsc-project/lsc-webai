@@ -31,7 +31,7 @@
 	</locale>
 
 	<resources>
-		<res id="InfoPanel.info" src="README"/>
+		<res id="InfoPanel.info" src="README.txt"/>
 		<res id="LicencePanel.licence" src="COPYING"/>
 		<res id="HTMLInfoPanel.launch" src="LAUNCH"/>
 		<res id="Installer.image" src="resources/lsc-logo.png" />

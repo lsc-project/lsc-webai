@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Ldap Synchronization Connector provid es tools to synchronize
+ * Ldap Synchronization Connector provides tools to synchronize
  * electronic identities from a list of data sources including
  * any database with a JDBC connector, another LDAP directory,
  * flat files...

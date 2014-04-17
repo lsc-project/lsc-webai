@@ -12,7 +12,7 @@
 			jQuery.noConflict();
 			jQuery(document).ready(function($) {
 				// Tabs
-				//jQuery('#tabs').tabs({cookie; {expires: 1}});
+				//jQuery("#tabs").tabs({cookie; {expires: 1}});
 		        jQuery("#tabs").tabs({
 		            ajaxOptions: {
 		                error: function(xhr, status, index, anchor) {
@@ -20,6 +20,19 @@
 		                }
 		            },
 		            cookie: {name:'tabCookieName',
+		                // store cookie for set time, without, it would be a session cookie
+		                expires: 30
+		            }
+		        });
+				// Tabs
+				//jQuery("#tabs-so").tabs({cookie; {expires: 1}});
+		        jQuery("#tabs-so").tabs({
+		            ajaxOptions: {
+		                error: function(xhr, status, index, anchor) {
+		                    $(anchor.hash).html("Cannot load this tab at this time.");
+		                }
+		            },
+		            cookie: {name:'tabSOCookieName',
 		                // store cookie for set time, without, it would be a session cookie
 		                expires: 30
 		            }

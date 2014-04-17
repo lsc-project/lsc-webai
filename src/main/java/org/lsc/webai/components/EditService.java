@@ -46,6 +46,7 @@
 package org.lsc.webai.components;
 
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,8 @@ import org.lsc.configuration.ConnectionType;
 import org.lsc.configuration.LscConfiguration;
 import org.lsc.configuration.ServiceType;
 import org.lsc.configuration.TaskType;
+import org.lsc.exception.LscConfigurationException;
+import org.lsc.service.IService;
 import org.lsc.webai.base.EditSettings;
 import org.lsc.webai.pages.EditTask;
 
@@ -130,23 +133,13 @@ public class EditService extends EditSettings {
 			if(service != null) {
 				update = true;
 				model = beanModelSource.createEditModel(service.getClass(), resources.getMessages());
+				model.exclude("id");
 			}
 		}
 	}
 
-	@Persist(PersistenceConstants.FLASH)
-	private Class<?> correspondingServiceType;
-	
 	Object onSuccessFromConnectionTypeForm() {
 		ConnectionType connection = LscConfiguration.getConnection(connectionName);
-		/** TODO
-		 * Fix commented code
-		 */
-//		if(connection != null && connection.getService(fromSource) != null && !Modifier.isAbstract(connection.getService(fromSource).getModifiers())) {
-//			correspondingServiceType = connection.getService(fromSource);
-//		} else {
-//			return null;
-//		}
 		return serviceTypeForm;
 	}
 	
@@ -159,13 +152,13 @@ public class EditService extends EditSettings {
 		ConnectionType connection = LscConfiguration.getConnection(connectionName);
 		try {
 			if(serviceTypeName != null) {
-				service = (ServiceType  ) Class.forName(serviceTypeName).newInstance();
-				/** TODO
-				 * Fix commented code
-				 */
-//				service.setName(task.getName() + "-" + (fromSource ? "src" : "dst"));
-//				service.setConnection(connection);
-				model = beanModelSource.createEditModel(service.getClass(), resources.getMessages());
+				service = (ServiceType) Class.forName(serviceTypeName).newInstance();
+				service.setName(task.getName() + "-" + (fromSource ? "src" : "dst"));
+		        service.setConnection(new ServiceType.Connection());
+		        service.getConnection().setReference(LscConfiguration.getConnection(connectionName));
+		        
+		        model = beanModelSource.createEditModel(service.getClass(), resources.getMessages());
+                model.exclude("id");
 			}
 			return this.editNewService;
 		} catch (InstantiationException e) {
@@ -191,13 +184,12 @@ public class EditService extends EditSettings {
 
 	public Map<String, String> getServiceTypesModel() {
 		Map<String, String> servicesModel = new HashMap<String, String>();
-		if(correspondingServiceType != null) {
-            for(Class<?> serviceClass : getReflections().getSubTypesOf(correspondingServiceType)) {
-				servicesModel.put(serviceClass.getName(), serviceClass.getSimpleName());
-			}
-			if(!Modifier.isAbstract(correspondingServiceType.getModifiers())) {
-				String cstname = correspondingServiceType.getName();
-				servicesModel.put(cstname, cstname.substring(cstname.lastIndexOf(".") + 1));
+		if(connectionName != null) {
+		    for(Class<? extends ServiceType> serviceClass: getReflections().getSubTypesOf(ServiceType.class)) {
+		        
+		        if(!Modifier.isAbstract(serviceClass.getModifiers())) {
+		            servicesModel.put(serviceClass.getName(), serviceClass.getSimpleName());
+		        }
 			}
 		}
 		return servicesModel;
@@ -206,34 +198,25 @@ public class EditService extends EditSettings {
 	public Map<String, String> getConnectionsModel() {
 		Map<String, String> connectionsModel = new HashMap<String, String>();
 		for (ConnectionType connection : LscConfiguration.getConnections()) {
-			
-//			if(connection.getService(fromSource) != null) {
-//				connectionsModel.put(connection.getName(), connection.getName());
-//			}
+			connectionsModel.put(connection.getName(), connection.getName());
 		}
 		return connectionsModel;
 	}
 	
-	/** TODO
-	 * Fix commented code
-	 */
-//	Object onSuccessFromEditNewService() {
-//		return onSuccessFromEditService();
-//	}
-//	Object onSuccessFromEditExistingService() {
-//		return onSuccessFromEditService();
-//	}
-//
-//	Object onSuccessFromEditService() {
-//		if (fromSource) {
-//			task.setSourceService(service);
-//		} else {
-//			task.setDestinationService(service);
-//		}
-//		return editTask.initialize(task);
-//	}
-//	
-//	Object onActionFromEditTask() {
-//		return  editTask.initialize(task);
-//	}
+	Object onSuccessFromEditNewService() throws LscConfigurationException {
+		return onSuccessFromEditService();
+	}
+	Object onSuccessFromEditExistingService() throws LscConfigurationException {
+		return onSuccessFromEditService();
+	}
+
+	Object onSuccessFromEditService() throws LscConfigurationException {
+		if (fromSource) {
+			LscConfiguration.setSourceService(task, service);
+		} else {
+            LscConfiguration.setDestinationService(task, service);
+		}
+
+		return editTask.initialize(task);
+	}
 }

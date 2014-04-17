@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<lsc xmlns="http://lsc-project.org/XSD/lsc-core-2.0.xsd" revision="2">
+<lsc xmlns="http://lsc-project.org/XSD/lsc-core-2.0.xsd" revision="13">
     <connections>
         <ldapConnection>
             <name>src-ldap</name>
@@ -14,6 +14,7 @@
             <factory>com.sun.jndi.ldap.LdapCtxFactory</factory>
             <tlsActivated>false</tlsActivated>
             <saslMutualAuthentication>false</saslMutualAuthentication>
+            <recursiveDelete>false</recursiveDelete>
         </ldapConnection>
         <ldapConnection>
             <name>dst-ldap</name>
@@ -28,6 +29,7 @@
             <factory>com.sun.jndi.ldap.LdapCtxFactory</factory>
             <tlsActivated>false</tlsActivated>
             <saslMutualAuthentication>false</saslMutualAuthentication>
+            <recursiveDelete>false</recursiveDelete>
         </ldapConnection>
         <databaseConnection>
             <name>src-jdbc</name>
@@ -36,10 +38,13 @@
             <password></password>
             <driver>org.hsqldb.jdbcDriver</driver>
         </databaseConnection>
+        <googleAppsConnection>
+            <name>google</name>
+        </googleAppsConnection>
     </connections>
     <audits/>
     <tasks>
-        <task>
+        <task id="ldap2ldap">
             <name>ldap2ldapTestTask</name>
             <bean>org.lsc.beans.SimpleBean</bean>
             <ldapSourceService>

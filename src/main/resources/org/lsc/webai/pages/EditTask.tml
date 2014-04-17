@@ -53,7 +53,7 @@
 				<font color="red">${message}</font>
 			</if>
 			<t:beaneditform t:object="task"
-				reorder="name,bean,syncHook,cleanHook" /><!-- customLibrary, -->
+				reorder="name,bean,syncHook,cleanHook" exclude="id"/><!-- customLibrary, -->
 		</div>
 		<t:if test="task.name">
 			<div id="tabs-srcService">

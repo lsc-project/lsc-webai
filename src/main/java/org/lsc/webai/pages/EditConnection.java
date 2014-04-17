@@ -49,7 +49,6 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.Retain;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
@@ -64,7 +63,6 @@ import org.lsc.webai.base.EditSettings;
  */
 public class EditConnection extends EditSettings {
 
-	@SuppressWarnings("unused")
 	@Property
 	@Persist(PersistenceConstants.FLASH)
 	private String message;
@@ -73,9 +71,8 @@ public class EditConnection extends EditSettings {
 	@Persist("flash")
 	private ConnectionType connection;
 
-	@SuppressWarnings("unused")
 	@Property
-	@Retain
+	@Persist(PersistenceConstants.FLASH)
 	private BeanModel<?> connectionModel;
 
 	@Inject
@@ -99,6 +96,7 @@ public class EditConnection extends EditSettings {
 	public Object initialize(ConnectionType connection) {
 		this.connection = connection;
 		connectionModel = beanModelSource.createEditModel(connection.getClass(), resources.getMessages());
+		connectionModel.exclude("id");
 		return this;
 	}
 	

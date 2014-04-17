@@ -67,12 +67,15 @@ import org.apache.tapestry5.corelib.components.Select;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.internal.SelectModelImpl;
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.lsc.Configuration;
 import org.lsc.Launcher;
 import org.lsc.configuration.AuditType;
 import org.lsc.configuration.ConnectionType;
 import org.lsc.configuration.JaxbXmlConfigurationHelper;
 import org.lsc.configuration.LscConfiguration;
+import org.lsc.configuration.PropertiesConfigurationHelper;
 import org.lsc.configuration.TaskType;
 import org.lsc.exception.LscConfigurationException;
 import org.lsc.exception.LscException;
@@ -226,25 +229,27 @@ public class HomePage extends AbstractPathEdition {
 		return messagesZone;
 	}
 	
-	static String messages;
+    @Persist(PersistenceConstants.FLASH)
+	private String messages;
 	
 	public String getInstanceMessages() {
 		if(lscInstance != null) {
 			String msg = lscInstance.getMessages();
 			if(msg != null && msg.length() > 0) {
-				messages = msg.trim();
+				messages += msg.trim();
 			}
 		}
 		return messages;
 	}
 	
-	static String errors;
+	@Persist(PersistenceConstants.FLASH)
+	private String errors;
 	
 	public String getInstanceErrors() {
 		if(lscInstance != null) {
 			String msg = lscInstance.getErrorMessages();
 			if(msg != null) {
-				errors = msg.trim();
+				errors += msg.trim();
 			}
 		}
 		return errors;
@@ -371,10 +376,14 @@ public class HomePage extends AbstractPathEdition {
 	@InjectPage
 	private EditAudit editAudit;
 
+	@Inject
+	private Messages locatedMessages;
+	
 	public SelectModel getAuditsModel() {
 		Collection<AuditType> audits = LscConfiguration.getAudits();
 		List<OptionModel> options = new ArrayList<OptionModel>();
 		for(AuditType audit : audits) {
+			
 			options.add(new OptionModelImpl(audit.getName(), audit.getName()));
 		}
 		return new SelectModelImpl(null, options);
@@ -383,7 +392,7 @@ public class HomePage extends AbstractPathEdition {
 	public SelectModel getAvailableAuditModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
 		for(Class<? extends AuditType> connectionClass : EditSettings.getReflections().getSubTypesOf(AuditType.class)) {
-			options.add(new OptionModelImpl(connectionClass.getSimpleName(), connectionClass.getName()));
+			options.add(new OptionModelImpl(locatedMessages.get(connectionClass.getName()), connectionClass.getName()));
 		}
 		return new SelectModelImpl(null, options);
 	}
@@ -448,7 +457,7 @@ public class HomePage extends AbstractPathEdition {
 	public SelectModel getAvailableConnectionModel() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
 		for(Class<? extends ConnectionType> connectionClass : EditSettings.getReflections().getSubTypesOf(ConnectionType.class)) {
-            options.add(new OptionModelImpl(connectionClass.getSimpleName(), connectionClass.getName()));
+            options.add(new OptionModelImpl(locatedMessages.get(connectionClass.getName()), connectionClass.getName()));
 		}
 		return new SelectModelImpl(null, options);
 	}
@@ -493,9 +502,19 @@ public class HomePage extends AbstractPathEdition {
 		return LscConfiguration.getInstance();
 	}
 
-	public Object initialize(String path) {
+	public Object initialize(String path) throws LscConfigurationException {
+        File xml = new File(path, JaxbXmlConfigurationHelper.LSC_CONF_XML);
+        File properties = new File(path, Configuration.PROPERTIES_FILENAME);
+        if(xml.exists() && xml.isFile()) {
+            LscConfiguration.loadFromInstance(new JaxbXmlConfigurationHelper().getConfiguration(xml.toString()));
+        } else if (properties.exists() && properties.isFile()) {
+            LOGGER.warn("LSC configuration loaded from old properties file format !");
+            PropertiesConfigurationHelper.loadConfigurationFrom(properties.getAbsolutePath());
+        } else {
+            throw new LscConfigurationException("Unable to load configuration configuration inside the directory: " + path);
+        }
 		lscConfigurationPath = path;
-		LscConfiguration.reinitialize();
+//		LscConfiguration.reinitialize();
 		return this;
 	}
 }

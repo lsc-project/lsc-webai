@@ -51,6 +51,7 @@ import org.apache.tapestry5.FieldValidator;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.ValidationException;
 import org.lsc.Configuration;
+import org.lsc.configuration.JaxbXmlConfigurationHelper;
 
 /**
  * Check that the directory provided contains a LSC configuration file
@@ -67,7 +68,8 @@ public class LSCPathValidator implements FieldValidator<String> {
 	}
 
 	public void validate(String value) throws ValidationException {
-		if(!new File(value.toString(), Configuration.PROPERTIES_FILENAME).exists()) {
+		if(!new File(value.toString(), Configuration.PROPERTIES_FILENAME).exists()
+		         && !new File(value.toString(), JaxbXmlConfigurationHelper.LSC_CONF_XML).exists()) {
 			throw new ValidationException("Missing LSC configuration file (lsc.xml or lsc.properties) in " + value.toString() + " !");
 		}
 	}

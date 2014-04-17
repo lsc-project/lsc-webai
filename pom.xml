@@ -74,7 +74,7 @@
 	<properties>
 		<tapestry-release-version>5.2.5</tapestry-release-version>
 		<slf4j-release-version>1.6.0</slf4j-release-version>
-		<jetty.version>6.1.26</jetty.version>
+		<jetty.version>9.1.2.v20140210</jetty.version>
 	</properties>
 
 	<build>
@@ -121,13 +121,13 @@
 
 			<!-- Run the application using "mvn jetty:run" -->
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
 				<configuration>
 					<contextPath>/</contextPath>
 					<!-- Log to the console. -->
-					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
+					<requestLog implementation="org.eclipse.jetty.server.NCSARequestLog">
 						<!-- This doesn't do anything for Jetty, but is a workaround for a 
 							Maven bug that prevents the requestLog from being set. -->
 						<append>true</append>
@@ -316,11 +316,11 @@
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
 		</repository>
-		<repository>
+<!-- 		<repository>
 			<id>OpenQA_Release</id>
 			<name>OpenQA Release Repository</name>
 			<url>http://archiva.openqa.org/repository/releases/</url>
-		</repository>
+		</repository> -->
 		<repository>
 			<id>lsc-site</id>
 			<name>LSC Release Repository</name>
@@ -345,18 +345,18 @@
 
 	</repositories>
 
-<!-- 	<pluginRepositories>
+ 	<pluginRepositories>
 
+<!-- 
 		As above, this can be commented out when access to the snapshot version 
 			of a Tapestry Maven plugin is not required.
 		<pluginRepository>
 			<id>tapestry-snapshots</id>
 			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
 		</pluginRepository>
-
-
-	</pluginRepositories>
  -->
+	</pluginRepositories>
+
 	<distributionManagement>
 		<repository>
 			<id>lsc-project.org</id>

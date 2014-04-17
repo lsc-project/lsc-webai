@@ -47,9 +47,11 @@ package org.lsc.webai.components;
 
 import org.apache.tapestry5.FieldValidator;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextField;
+import org.lsc.exception.LscConfigurationException;
 import org.lsc.webai.pages.HomePage;
 import org.lsc.webai.utils.LSCPathValidator;
 
@@ -63,12 +65,28 @@ public class EditConfigurationPath extends AbstractPathEdition {
 	@InjectPage
 	private HomePage index;
 	
+	@InjectComponent("form")
+    private Form form;
+
 	public EditConfigurationPath() {
 	}
 	
 	public Object onActionFromForm() {
 		if(getFilePath() != null) {
-			return index.initialize(getFilePath());
+			try {
+                return index.initialize(getFilePath());
+            } catch (LscConfigurationException e) {
+                Throwable origin = e.getCause();
+                while(origin != null && origin.getLocalizedMessage() == null) {
+                    origin = origin.getCause();
+                }
+                if(origin.getLocalizedMessage() != null) {
+                    form.recordError(origin.getLocalizedMessage());
+                } else {
+                    form.recordError(e.getLocalizedMessage());
+                }
+                return this;
+            }
 		} else {
 			return this;
 		}
@@ -81,9 +99,6 @@ public class EditConfigurationPath extends AbstractPathEdition {
 	@Component(parameters = {"value=filePath","validate=prop:fileValidator"} )
 	private TextField fileCompletion;
 	
-	@Component(id="form")
-	private Form form;
-
 	public FieldValidator getFileValidator() {
 		return new LSCPathValidator();
 	}

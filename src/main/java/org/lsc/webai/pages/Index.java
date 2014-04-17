@@ -8,6 +8,7 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.ProgressiveDisplay;
 import org.lsc.exception.LscException;
@@ -28,11 +29,15 @@ public class Index extends AbstractPathEdition {
 	@Persist
 	private String lscHome;
 	
-	void setupRender() {
-		lscHome = System.getProperty("LSC_HOME");
+	Object onActivate() {
+        lscHome = System.getProperty("LSC_HOME");
+        if(lscHome != null && new File(lscHome, "etc/lsc.xml").isFile())  {
+            HomePage.lscConfigurationPath = new File(lscHome, "etc").getAbsolutePath();
+            return homePage;
+        } else {
+            return null;
+        }
 	}
-
-	
 	
 	@OnEvent( component = EventConstants.PROGRESSIVE_DISPLAY )
 	Object onEventFromProgressiveDisplay() throws LscException {
