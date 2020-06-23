@@ -10,7 +10,7 @@ fi
 
 if ! test -d $LSC_HOME/jetty/logs && ! test -d $LSC_HOME/logs ; then
    mkdir $LSC_HOME/logs || exit $?
-   Ln -s $LSC_HOME/logs $LSC_HOME/jetty/logs || exit $?
+   ln -s $LSC_HOME/logs $LSC_HOME/jetty/logs || exit $?
 elif test -d $LSC_HOME/jetty/logs && ! test -h $LSC_HOME/jetty/logs && ! test -f $LSC_HOME/logs ; then
    mv $LSC_HOME/jetty/logs $LSC_HOME/logs || exit $?
    ln -s $LSC_HOME/logs $LSC_HOME/jetty/logs || exit $?
