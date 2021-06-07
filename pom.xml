@@ -275,7 +275,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
-			<version>0.9.21</version>
+			<version>1.2.0</version>
 		</dependency>
 		<!-- <dependency> <groupId>org.chenillekit</groupId> <artifactId>chenillekit-quartz</artifactId> 
 			<version>1.2.0</version> </dependency> -->
